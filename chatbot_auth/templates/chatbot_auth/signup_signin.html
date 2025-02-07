@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up & Sign In - CONVERSA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --nav-bg: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #7289da;
+            --input-bg: #3d3d3d;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --nav-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #666666;
+            --accent: #5865F2;
+            --input-bg: #ecf0f1;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: var(--nav-bg);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent), #a8b8ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            margin-left: auto;
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a:not(.mobile-theme-toggle) {
+            position: relative;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:not(.mobile-theme-toggle)::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.mobile-theme-toggle):hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-left: auto;
+        }
+
+        .auth-container {
+         max-width: 400px;
+         width: 90%;
+         margin: auto;
+         padding: 30px;
+         background: var(--bg-secondary);
+         border-radius: 20px;
+         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+        }
+
+        h2 {
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 10px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .switch-link {
+            color: var(--accent);
+            text-align: center;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: block;
+            transition: color 0.3s;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            padding-left: 10px;
+        }
+
+        .messages {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .message {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            color: white;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.success {
+            background: var(--success-color);
+        }
+
+        .message.error {
+            background: var(--error-color);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                margin-left: 0;
+                background: var(--nav-bg);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .auth-container {
+                width: 85%;
+                padding: 20px;
+                margin: auto;
+            }
+
+            .mobile-theme-toggle {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--text-primary);
+                padding: 8px;
+                cursor: pointer;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">CONVERSA</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <div class="mobile-theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
+                <span>Theme</span>
+            </div>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <div class="auth-container">
+        <div id="signin-form" {% if 'signup_submit' in request.POST %}class="hidden"{% endif %}>
+            <h2>Welcome Back</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in signin_form %}
+                <div class="input-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="error-message">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button class="btn" type="submit" name="signin_submit">Sign In</button>
+                <span class="switch-link" onclick="toggleForms()">Don't have an account? Sign Up</span>
+            </form>
+        </div>
+
+        <div id="signup-form" {% if not 'signup_submit' in request.POST %}class="hidden"{% endif %}>
+            <h2>Create Account</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in signup_form %}
+                <div class="input-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="error-message">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button class="btn" type="submit" name="signup_submit">Sign Up</button>
+                <span class="switch-link" onclick="toggleForms()">Already have an account? Sign In</span>
+            </form>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+
+            const icons = document.querySelectorAll('.mobile-theme-toggle i');
+            icons.forEach(icon => {
+                icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            });
+        }
+
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        function toggleForms() {
+            document.getElementById("signin-form").classList.toggle("hidden");
+            document.getElementById("signup-form").classList.toggle("hidden");
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => message.remove(), 600);
+                }, 3000);
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.navbar')) {
+                document.querySelector('.nav-links').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
