@@ -1,34 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up & Sign In - CONVERSA</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
     <style>
-        :root[data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --nav-bg: #2d2d2d;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --accent: #7289da;
-            --input-bg: #3d3d3d;
-            --error-color: #e74c3c;
-            --success-color: #2ecc71;
-        }
-
-        :root[data-theme="light"] {
-            --bg-primary: #f5f7fa;
-            --bg-secondary: #ffffff;
-            --nav-bg: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #666666;
-            --accent: #5865F2;
-            --input-bg: #ecf0f1;
-            --error-color: #e74c3c;
-            --success-color: #2ecc71;
+        :root {
+            /* Color Palette from homepage.html */
+            --bg-primary: #1E1E1E;      /* Deep Gray */
+            --bg-secondary: #121212;    /* Charcoal Black */
+            --accent-blue: #00A8E8;     /* Neon Blue */
+            --accent-cyan: #00E6E6;     /* Cyan */
+            --accent-purple: #B388EB;   /* Soft Purple */
+            --accent-magenta: #FF3CAC;  /* Magenta */
+            --text-primary: #E0E0E0;    /* Off-White */
+            --text-secondary: #A0A0A0;  /* Lighter Gray */
+            --gradient: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --error-color: #ef4444;     /* Bold red for errors */
+            --success-color: #10b981;   /* Bright green for success */
         }
 
         * {
@@ -36,349 +32,392 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
         }
 
         body {
             background: var(--bg-primary);
             color: var(--text-primary);
-            transition: all 0.3s ease;
-            height: 100vh;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1rem 5%;
-            background: var(--nav-bg);
-            display: flex;
+            height: 100vh;
+            justify-content: center;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
+            padding: 15px;
+            overflow: hidden;
         }
 
-        .nav-brand {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--accent), #a8b8ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links {
-            margin-left: auto;
-            display: flex;
-            gap: 2.5rem;
-            align-items: center;
-        }
-
-        .nav-links a:not(.mobile-theme-toggle) {
-            position: relative;
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:not(.mobile-theme-toggle)::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:not(.mobile-theme-toggle):hover::after {
-            width: 100%;
-        }
-
-        .hamburger {
-            display: none;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            margin-left: auto;
-        }
-
+        /* Auth Container */
         .auth-container {
-         max-width: 400px;
-         width: 90%;
-         margin: auto;
-         padding: 30px;
-         background: var(--bg-secondary);
-         border-radius: 20px;
-         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-         position: absolute;
-         top: 50%;
-         left: 50%;
-         transform: translate(-50%, -50%);
-        }
-
-        h2 {
-            color: var(--text-primary);
+            width: 100%;
+            max-width: 450px;
+            background: var(--glass-bg);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px var(--shadow-color);
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8rem;
+            border: 1px solid var(--glass-border);
+            position: relative;
         }
 
+        .auth-container h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.2rem);
+            color: var(--accent-blue);
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .auth-container h2:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+
+
+        /* Input Group */
         .input-group {
-            margin-bottom: 20px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-size: clamp(14px, 2vw, 16px);
+            outline: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 5px var(--accent-cyan);
         }
 
         .input-group label {
-            display: block;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            border-radius: 10px;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            font-size: 1rem;
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: var(--text-secondary);
+            pointer-events: none;
             transition: all 0.3s ease;
         }
 
-        .input-field:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--accent);
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            background: var(--bg-secondary);
+            padding: 0 5px;
+            border-radius: 4px;
         }
 
+        /* Button Styles */
         .btn {
             width: 100%;
-            padding: 12px;
-            background: var(--accent);
-            color: white;
+            padding: 14px;
+            background: var(--gradient);
+            color: black;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
+            border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            box-shadow: 0 0 5px var(--accent-blue);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--accent-cyan);
         }
 
-        .switch-link {
-            color: var(--accent);
-            text-align: center;
-            margin-top: 15px;
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Social Login Buttons */
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--accent-blue);
+            border-radius: 25px;
+            color: var(--text-primary);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-weight: 500;
+            margin-top: 10px;
             cursor: pointer;
-            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        .social-btn:hover {
+            background: var(--accent-blue);
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        /* Switch Link */
+        .switch-link {
             display: block;
-            transition: color 0.3s;
+            margin-top: 20px;
+            color: var(--accent-purple);
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
         }
 
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.8rem;
-            margin-top: 5px;
-            padding-left: 10px;
-        }
-
-        .messages {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .message {
-            padding: 12px 20px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            color: white;
-            animation: slideIn 0.3s ease;
-        }
-
-        .message.success {
-            background: var(--success-color);
-        }
-
-        .message.error {
-            background: var(--error-color);
+        .switch-link:hover {
+            color: var(--accent-magenta);
+            text-shadow: 0 0 5px var(--accent-magenta);
         }
 
         .hidden {
             display: none;
         }
 
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem;
+        /* Messages */
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            box-shadow: 0 0 5px var(--shadow-color);
+        }
+
+        .error {
+            background: var(--error-color);
+            color: var(--text-primary);
+        }
+
+        .success {
+            background: var(--success-color);
+            color: var(--text-primary);
+        }
+
+        /* Chatbot Teaser */
+        .chatbot-teaser {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gradient);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-weight: 500;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-blue);
+        }
+
+        .chatbot-teaser:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Accessibility */
+        .auth-container:focus-within {
+            outline: 2px solid var(--accent-cyan);
+            outline-offset: 4px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        /* Mobile-First */
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 25px;
+                max-width: 100%;
+                border-radius: 16px;
             }
 
-            .nav-brand {
+            .btn, .social-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .auth-container h2 {
                 font-size: 1.5rem;
             }
 
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                margin-left: 0;
-                background: var(--nav-bg);
-                flex-direction: column;
-                padding: 1rem;
-                gap: 1rem;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .hamburger {
-                display: block;
-            }
-
-            .auth-container {
-                width: 85%;
-                padding: 20px;
-                margin: auto;
-            }
-
-            .mobile-theme-toggle {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                color: var(--text-primary);
-                padding: 8px;
-                cursor: pointer;
+            .chatbot-teaser {
+                font-size: 10px;
+                padding: 6px 10px;
             }
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
+        /* Projector Optimization */
+        @media (min-width: 1024px) {
+            .auth-container {
+                max-width: 500px;
+                padding: 50px;
             }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+
+            .auth-container h2 {
+                font-size: 2.2rem;
+            }
+
+            .btn, .social-btn {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">CONVERSA</div>
-        <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <div class="mobile-theme-toggle" onclick="toggleTheme()">
-                <i class="fas fa-moon"></i>
-                <span>Theme</span>
-            </div>
-        </div>
-        <button class="hamburger" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </button>
-    </nav>
+    <div class="auth-container" tabindex="0">
 
-    <div class="auth-container">
-        <div id="signin-form" {% if 'signup_submit' in request.POST %}class="hidden"{% endif %}>
-            <h2>Welcome Back</h2>
-            <form method="POST">
-                {% csrf_token %}
-                {% for field in signin_form %}
-                <div class="input-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                    <div class="error-message">{{ field.errors|striptags }}</div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                <button class="btn" type="submit" name="signin_submit">Sign In</button>
-                <span class="switch-link" onclick="toggleForms()">Don't have an account? Sign Up</span>
-            </form>
-        </div>
 
-        <div id="signup-form" {% if not 'signup_submit' in request.POST %}class="hidden"{% endif %}>
+        <!-- Flash Messages -->
+        <!-- signup_signin.html (snippet) -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="message {% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% else %}{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+        <!-- Sign Up Form -->
+        <div id="signup-form">
             <h2>Create Account</h2>
-            <form method="POST">
+            <form method="POST" action="{% url 'chatbot_auth:auth' %}">
                 {% csrf_token %}
-                {% for field in signup_form %}
                 <div class="input-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                    <div class="error-message">{{ field.errors|striptags }}</div>
+                    <input type="text" name="username" value="{{ signup_form.username.value|default:'' }}" required placeholder=" " aria-label="Username">
+                    <label>Username</label>
+                    {% if signup_form.username.errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signup_form.username.errors.0 }}</span>
                     {% endif %}
                 </div>
-                {% endfor %}
+                <div class="input-group">
+                    <input type="text" name="first_name" value="{{ signup_form.first_name.value|default:'' }}" required placeholder=" " aria-label="Name">
+                    <label>Name</label>
+                    {% if signup_form.first_name.errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signup_form.first_name.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" value="{{ signup_form.email.value|default:'' }}" required placeholder=" " aria-label="Work Email">
+                    <label>Work Email</label>
+                    {% if signup_form.email.errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signup_form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" required placeholder=" " aria-label="Password">
+                    <label>Password</label>
+                    {% if signup_form.password.errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signup_form.password.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <input type="password" name="confirm_password" required placeholder=" " aria-label="Confirm Password">
+                    <label>Confirm Password</label>
+                    {% if signup_form.confirm_password.errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signup_form.confirm_password.errors.0 }}</span>
+                    {% endif %}
+                    {% if signup_form.non_field_errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signup_form.non_field_errors.0 }}</span>
+                    {% endif %}
+                </div>
                 <button class="btn" type="submit" name="signup_submit">Sign Up</button>
-                <span class="switch-link" onclick="toggleForms()">Already have an account? Sign In</span>
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-btn">
+                    <i class="fab fa-google"></i> Sign Up with Google
+                </a>
+                <a href="{% url 'social:begin' 'microsoft-oauth2' %}" class="social-btn">
+                    <i class="fab fa-microsoft"></i> Sign Up with Microsoft
+                </a>
             </form>
+            <a href="#" class="switch-link" onclick="toggleForms()">Already have an account? Sign In</a>
         </div>
 
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="message {{ message.tags }}">{{ message }}</div>
-            {% endfor %}
+        <!-- Sign In Form -->
+        <div id="signin-form" class="hidden">
+            <h2>Sign In</h2>
+            <form method="POST" action="{% url 'chatbot_auth:auth' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" name="username" value="{{ signin_form.username.value|default:'' }}" required placeholder=" " aria-label="Username">
+                    <label>Username</label>
+                    {% if signin_form.username.errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signin_form.username.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" required placeholder=" " aria-label="Password">
+                    <label>Password</label>
+                    {% if signin_form.password.errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signin_form.password.errors.0 }}</span>
+                    {% endif %}
+                    {% if signin_form.non_field_errors %}
+                        <span class="error" style="color: var(--error-color); font-size: 12px;">{{ signin_form.non_field_errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <button class="btn" type="submit" name="signin_submit">Sign In</button>
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-btn">
+                    <i class="fab fa-google"></i> Sign In with Google
+                </a>
+                <a href="{% url 'social:begin' 'microsoft-oauth2' %}" class="social-btn">
+                    <i class="fab fa-microsoft"></i> Sign In with Microsoft
+                </a>
+            </form>
+            <a href="#" class="switch-link" onclick="toggleForms()">Don't have an account? Sign Up</a>
         </div>
-        {% endif %}
+    </div>
+
+    <!-- Chatbot Teaser -->
+    <div class="chatbot-teaser" onclick="window.location.href='{% url 'chatbot_project:homepage' %}'">
+        Back to CONVERSA
     </div>
 
     <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const theme = html.getAttribute('data-theme');
-            const newTheme = theme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-
-            const icons = document.querySelectorAll('.mobile-theme-toggle i');
-            icons.forEach(icon => {
-                icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-            });
-        }
-
-        function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
-
         function toggleForms() {
-            document.getElementById("signin-form").classList.toggle("hidden");
-            document.getElementById("signup-form").classList.toggle("hidden");
+            const signupForm = document.getElementById('signup-form');
+            const signinForm = document.getElementById('signin-form');
+            signupForm.classList.toggle('hidden');
+            signinForm.classList.toggle('hidden');
+            anime({
+                targets: '.auth-container > div:not(.hidden)',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 500,
+                easing: 'easeOutQuad'
+            });
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const messages = document.querySelectorAll('.message');
-            messages.forEach(message => {
-                setTimeout(() => {
-                    message.style.opacity = '0';
-                    setTimeout(() => message.remove(), 600);
-                }, 3000);
-            });
-        });
 
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.navbar')) {
-                document.querySelector('.nav-links').classList.remove('active');
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            anime({
+                targets: '.auth-container',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                duration: 1000,
+                easing: 'easeOutQuad'
+            });
         });
     </script>
 </body>

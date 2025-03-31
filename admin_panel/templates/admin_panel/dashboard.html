@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Analytics Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #171923;
+            --bg-secondary: #252a41;
+            --nav-bg: #1f2537;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #60a5fa;
+            --card-bg: #1f2537;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            --chart-bg: #252a41;
+            --success: #34d399;
+            --warning: #fbbf24;
+            --error: #f87171;
+            --nav-hover: rgba(96, 165, 250, 0.15);
+            --nav-active: rgba(96, 165, 250, 0.25);
+            --clear-btn: #f87171;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --nav-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #3b82f6;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --chart-bg: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --nav-hover: rgba(59, 130, 246, 0.1);
+            --nav-active: rgba(59, 130, 246, 0.2);
+            --clear-btn: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: var(--nav-bg);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            opacity: 0.85;
+        }
+
+        .navbar-nav {
+            gap: 0.75rem;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background-color: var(--nav-hover);
+            color: var(--accent);
+        }
+
+        .nav-link.active {
+            background-color: var(--nav-active);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 2px;
+            left: 50%;
+            background-color: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 60%;
+            left: 20%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--nav-hover);
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-container label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-container input[type="date"] {
+            background: var(--bg-secondary);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            color: var(--text-primary);
+        }
+
+        .more-filters-btn {
+            background: var(--text-secondary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            color: var(--bg-primary);
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .more-filters-btn:hover {
+            opacity: 0.9;
+        }
+
+        .more-filters-dropdown {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .more-filters-dropdown label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .more-filters-dropdown select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-card h3 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .export-btn, .download-btn {
+            background: var(--accent);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .export-btn:hover, .download-btn:hover {
+            opacity: 0.9;
+            color: white;
+        }
+
+        .clear-btn {
+            background: var(--clear-btn);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            opacity: 0.9;
+            color: white;
+        }
+
+        .real-time-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .real-time-toggle label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .real-time-toggle input[type="checkbox"] {
+            width: 2rem;
+            height: 1rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+            .analytics-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .filter-container {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .navbar-nav {
+                gap: 0.5rem;
+            }
+            .nav-link {
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'admin_panel:dashboard' %}">Chatbot Analytics</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'chatbot_project:homepage' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'admin_panel:dashboard' %}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'admin_panel:manage_faqs' %}">Manage FAQs</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="analytics-header">
+            <h1>Chatbot Analytics</h1>
+            <form id="dateFilterForm" class="filter-container">
+                <div>
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="start_date" value="{{ request.GET.start_date }}">
+                </div>
+                <div>
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="end_date" value="{{ request.GET.end_date }}">
+                </div>
+                <button type="submit" class="export-btn">Apply Filter</button>
+                <button type="button" id="clearFilterBtn" class="clear-btn">Clear Filter</button>
+                <div class="dropdown">
+                    <button class="more-filters-btn" type="button" data-bs-toggle="dropdown">More Filters</button>
+                    <div class="dropdown-menu more-filters-dropdown">
+                        <label for="queryType">Query Type:</label>
+                        <select id="queryType" name="query_type">
+                            <option value="all" {% if query_type == 'all' %}selected{% endif %}>All</option>
+                            <option value="resolved" {% if query_type == 'resolved' %}selected{% endif %}>Resolved</option>
+                            <option value="unresolved" {% if query_type == 'unresolved' %}selected{% endif %}>Unresolved</option>
+                        </select>
+                        <label for="datePreset">Date Range Preset:</label>
+                        <select id="datePreset" name="date_preset">
+                            <option value="custom" {% if request.GET.date_preset == 'custom' or not request.GET.date_preset %}selected{% endif %}>Custom</option>
+                            <option value="last7" {% if request.GET.date_preset == 'last7' %}selected{% endif %}>Last 7 Days</option>
+                            <option value="last30" {% if request.GET.date_preset == 'last30' %}selected{% endif %}>Last 30 Days</option>
+                            <option value="thisMonth" {% if request.GET.date_preset == 'thisMonth' %}selected{% endif %}>This Month</option>
+                        </select>
+                        <label for="topN">Show Top (All Queries):</label>
+                        <select id="topN" name="top_n">
+                            <option value="5" {% if request.GET.top_n == '5' %}selected{% endif %}>Top 5</option>
+                            <option value="10" {% if request.GET.top_n == '10' or not request.GET.top_n %}selected{% endif %}>Top 10</option>
+                            <option value="all" {% if request.GET.top_n == 'all' %}selected{% endif %}>All</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Queries</h3>
+                <p style="color: var(--success)">{{ total_queries }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Unresolved Queries</h3>
+                <p style="color: var(--error)">{{ unresolved_queries }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Resolution Rate</h3>
+                <p style="color: var(--success)">{{ resolution_rate }}%</p>
+            </div>
+            <div class="stat-card">
+                <h3>Avg Response Time</h3>
+                <p>{{ avg_response_time }}s</p>
+            </div>
+            <div class="stat-card">
+                <h3>Peak Hour</h3>
+                <p>{{ peak_hour }}:00</p>
+            </div>
+            <div class="stat-card">
+                <h3>Leads Identified</h3>
+                <p style="color: var(--warning)">{{ leads }}</p>
+            </div>
+        </div>
+
+        <div class="chart-container" id="queryChartContainer">
+            <div class="chart-title">
+                {% if query_type == 'resolved' %}Top Resolved Queries
+                {% elif query_type == 'unresolved' %}Top Unresolved Queries
+                {% else %}Top Frequent Queries{% endif %}
+            </div>
+            <canvas id="queryChart"></canvas>
+            <button class="download-btn" id="downloadQueryChart" style="position: absolute; top: 1.5rem; right: 1.5rem;">Download Chart</button>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Query Trends Over Time</div>
+            <canvas id="timeChart"></canvas>
+            <button class="download-btn" id="downloadTimeChart" style="position: absolute; top: 1.5rem; right: 1.5rem;">Download Chart</button>
+        </div>
+
+        <div class="real-time-toggle">
+            <label for="realTimeToggle">Real-Time Updates:</label>
+            <input type="checkbox" id="realTimeToggle" name="real_time">
+        </div>
+
+        <button id="exportBtn" class="export-btn">Export to CSV</button>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+            updateCharts(newTheme);
+        }
+
+        function updateCharts(theme) {
+            const isDarkMode = theme === 'dark';
+            const chartTextColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+            const chartGridColor = isDarkMode ? 'rgba(226, 232, 240, 0.1)' : 'rgba(30, 41, 59, 0.1)';
+
+            queryChart.options.scales.x.ticks.color = chartTextColor;
+            queryChart.options.scales.y.ticks.color = chartTextColor;
+            queryChart.options.scales.y.grid.color = chartGridColor;
+            queryChart.options.plugins.legend.labels.color = chartTextColor;
+            queryChart.update();
+
+            timeChart.options.scales.x.ticks.color = chartTextColor;
+            timeChart.options.scales.y.ticks.color = chartTextColor;
+            timeChart.options.scales.y.grid.color = chartGridColor;
+            timeChart.options.plugins.legend.labels.color = chartTextColor;
+            timeChart.update();
+        }
+
+        let queryChart, timeChart;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+            const chartTextColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+            const chartGridColor = isDarkMode ? 'rgba(226, 232, 240, 0.1)' : 'rgba(30, 41, 59, 0.1)';
+
+            const queryCtx = document.getElementById('queryChart').getContext('2d');
+            const timeCtx = document.getElementById('timeChart').getContext('2d');
+
+            const queryLabels = [{% for stat in query_stats %}'{{ stat.query_text|truncatechars:20|escapejs }}',{% endfor %}];
+            const queryData = [{% for stat in query_stats %}{{ stat.count }},{% endfor %}];
+            const timeLabels = [{% for stat in time_stats %}'{{ stat.day|date:"Y-m-d"|escapejs }}',{% endfor %}];
+            const timeData = [{% for stat in time_stats %}{{ stat.count }},{% endfor %}];
+
+            // Dynamic height for query chart
+            const barHeight = 40; // Height per bar in pixels (increased for spacing)
+            const minHeight = 450; // Minimum height in pixels
+            const calculatedHeight = Math.max(minHeight, queryLabels.length * barHeight);
+            document.getElementById('queryChartContainer').style.height = `${calculatedHeight}px`;
+
+            queryChart = new Chart(queryCtx, {
+                type: 'bar',
+                data: {
+                    labels: queryLabels.length ? queryLabels : ['No Data'],
+                    datasets: [{
+                        label: 'Query Frequency',
+                        data: queryData.length ? queryData : [0],
+                        backgroundColor: 'rgba(96, 165, 250, 0.7)',
+                        borderColor: 'rgba(96, 165, 250, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barThickness: 15 // Reduced thickness for more gap
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: chartTextColor, font: { size: 12 } },
+                            grid: { color: chartGridColor, borderColor: chartGridColor },
+                            title: { display: true, text: 'Frequency', color: chartTextColor, font: { size: 14 } }
+                        },
+                        y: {
+                            ticks: { color: chartTextColor, font: { size: 12 }, padding: 10 },
+                            grid: { display: false },
+                            title: { display: true, text: 'Queries', color: chartTextColor, font: { size: 14 } }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: chartTextColor, font: { size: 12 } }, position: 'top' },
+                        tooltip: { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)' }
+                    },
+                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
+                    // Add spacing between bars
+                    categoryPercentage: 0.8, // Controls the space allocated to each category
+                    barPercentage: 0.6 // Controls the width of the bar within the category (reduced for gaps)
+                }
+            });
+
+            timeChart = new Chart(timeCtx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels.length ? timeLabels : ['No Data'],
+                    datasets: [{
+                        label: 'Queries Over Time',
+                        data: timeData.length ? timeData : [0],
+                        borderColor: 'rgba(96, 165, 250, 1)',
+                        backgroundColor: 'rgba(96, 165, 250, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: chartTextColor },
+                            grid: { color: chartGridColor }
+                        },
+                        x: {
+                            ticks: { color: chartTextColor, maxRotation: 45, minRotation: 45 },
+                            grid: { color: chartGridColor }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: chartTextColor } },
+                        tooltip: { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)' }
+                    }
+                }
+            });
+
+            // Date Filter Form with persistence
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const queryTypeSelect = document.getElementById('queryType');
+            const datePresetSelect = document.getElementById('datePreset');
+            const topNSelect = document.getElementById('topN');
+
+            document.getElementById('dateFilterForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+                const queryType = queryTypeSelect.value;
+                const datePreset = datePresetSelect.value;
+                const topN = topNSelect.value;
+                const url = new URL(window.location.href);
+                if (startDate) url.searchParams.set('start_date', startDate);
+                else url.searchParams.delete('start_date');
+                if (endDate) url.searchParams.set('end_date', endDate);
+                else url.searchParams.delete('end_date');
+                url.searchParams.set('query_type', queryType);
+                url.searchParams.set('date_preset', datePreset);
+                url.searchParams.set('top_n', topN);
+                window.location.href = url.toString();
+            });
+
+            // Clear Filter
+            document.getElementById('clearFilterBtn').addEventListener('click', function() {
+                startDateInput.value = '';
+                endDateInput.value = '';
+                queryTypeSelect.value = 'all';
+                datePresetSelect.value = 'custom';
+                topNSelect.value = '10';
+                const url = new URL(window.location.href);
+                url.searchParams.delete('start_date');
+                url.searchParams.delete('end_date');
+                url.searchParams.delete('query_type');
+                url.searchParams.delete('date_preset');
+                url.searchParams.delete('top_n');
+                window.location.href = url.toString();
+            });
+
+            // Date Preset Logic
+            datePresetSelect.addEventListener('change', function() {
+                const preset = this.value;
+                const today = new Date();
+                if (preset !== 'custom') {
+                    let start;
+                    switch (preset) {
+                        case 'last7':
+                            start = new Date(today.setDate(today.getDate() - 7));
+                            break;
+                        case 'last30':
+                            start = new Date(today.setDate(today.getDate() - 30));
+                            break;
+                        case 'thisMonth':
+                            start = new Date(today.getFullYear(), today.getMonth(), 1);
+                            break;
+                    }
+                    startDateInput.value = start.toISOString().split('T')[0];
+                    endDateInput.value = new Date().toISOString().split('T')[0];
+                }
+            });
+
+            // Download Chart as Image
+            document.getElementById('downloadQueryChart').addEventListener('click', function() {
+                const link = document.createElement('a');
+                link.href = queryChart.toBase64Image();
+                link.download = 'query_chart.png';
+                link.click();
+            });
+
+            document.getElementById('downloadTimeChart').addEventListener('click', function() {
+                const link = document.createElement('a');
+                link.href = timeChart.toBase64Image();
+                link.download = 'query_trends_over_time.png';
+                link.click();
+            });
+
+            // Export to CSV
+            document.getElementById('exportBtn').addEventListener('click', function() {
+                let csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "Query,Frequency\n";
+                const labels = queryChart.data.labels;
+                const data = queryChart.data.datasets[0].data;
+                labels.forEach((label, index) => {
+                    csvContent += `"${label}",${data[index]}\n`;
+                });
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'chatbot_analytics.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Real-Time Toggle (Placeholder)
+            document.getElementById('realTimeToggle').addEventListener('change', function() {
+                const isRealTime = this.checked;
+                if (isRealTime) {
+                    console.log('Real-time mode ON - Implement backend integration here');
+                } else {
+                    console.log('Real-time mode OFF');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

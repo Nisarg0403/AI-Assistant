@@ -17,6 +17,8 @@
             --user-msg: #4CAF50;
             --bot-msg: #7289da;
             --bot-icon-bg: #ff9800;
+            --gradient-start: #7289da;
+            --gradient-end: #a8b8ff;
         }
 
         :root[data-theme="light"] {
@@ -29,6 +31,8 @@
             --user-msg: #E3F2FD;
             --bot-msg: #fff3e0;
             --bot-icon-bg: #ff9800;
+            --gradient-start: #5865F2;
+            --gradient-end: #a8b8ff;
         }
 
         * {
@@ -155,6 +159,7 @@
             border-radius: 15px;
             margin: 0 10px;
             word-wrap: break-word;
+            position: relative;
         }
 
         .user .message-content {
@@ -165,6 +170,15 @@
         .bot .message-content {
             background: var(--bot-msg);
             margin-left: 0;
+        }
+
+        .message-content::after {
+            content: attr(data-timestamp);
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-align: right;
         }
 
         .message-icon {
@@ -198,6 +212,7 @@
         .input-box {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
         input {
@@ -226,15 +241,119 @@
             transform: translateY(-2px);
         }
 
+        .mic-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mic-btn.active {
+            color: #ff0000;
+        }
+
+        .faq-toggle {
+            padding: 8px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            margin: 10px 20px;
+            text-align: center;
+        }
+
+        .faq-toggle:hover {
+            transform: scale(1.05);
+            background: var(--gradient-end);
+        }
+
+        .faq-buttons {
+            display: none;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(0,0,0,0.1);
+            justify-content: center;
+        }
+
+        .faq-buttons.active {
+            display: flex;
+        }
+
+        .faq-btn {
+            padding: 8px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .faq-btn:hover {
+            transform: scale(1.05);
+            background: var(--gradient-end);
+        }
+
+        .child-faq-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .child-faq-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .child-faq-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .contact-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: var(--gradient-end);
+        }
+
+        [data-theme="dark"] .bot .message-content .contact-link {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .bot .message-content .contact-link:hover {
+            color: #a8b8ff;
+        }
+
+        [data-theme="light"] .bot .message-content .contact-link {
+            color: #2c3e50;
+        }
+
+        [data-theme="light"] .bot .message-content .contact-link:hover {
+            color: #5865F2;
+        }
+
         @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem;
-            }
-
-            .nav-brand {
-                font-size: 1.5rem;
-            }
-
+            .navbar { padding: 1rem; }
+            .nav-brand { font-size: 1.5rem; }
             .nav-links {
                 display: none;
                 position: absolute;
@@ -247,48 +366,20 @@
                 gap: 1rem;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .hamburger {
-                display: block;
-            }
-
+            .nav-links.active { display: flex; }
+            .hamburger { display: block; }
             .chat-container {
                 margin: 70px 10px 0;
                 height: calc(100vh - 90px);
                 border-radius: 15px;
             }
-
-            .message-content {
-                max-width: 85%;
-                font-size: 14px;
-            }
-
-            .input-container {
-                padding: 10px;
-            }
-
-            input {
-                font-size: 14px;
-                padding: 10px;
-            }
-
-            button {
-                padding: 10px 16px;
-                font-size: 14px;
-            }
-
-            .mobile-theme-toggle {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                color: var(--text-primary);
-                padding: 8px;
-                cursor: pointer;
-            }
+            .message-content { max-width: 85%; font-size: 14px; }
+            .input-container { padding: 10px; }
+            input { font-size: 14px; padding: 10px; }
+            button { padding: 10px 16px; font-size: 14px; }
+            .mobile-theme-toggle { display: flex; align-items: center; gap: 10px; color: var(--text-primary); padding: 8px; cursor: pointer; }
+            .faq-btn, .child-faq-btn { max-width: 140px; font-size: 12px; }
+            .faq-toggle { font-size: 12px; }
         }
 
         @keyframes fadeIn {
@@ -323,7 +414,7 @@
     <nav class="navbar">
         <div class="nav-brand">CONVERSA</div>
         <div class="nav-links">
-            <a href="#">Home</a>
+            <a href="{% url 'chatbot_project:homepage' %}">Home</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
             <div class="mobile-theme-toggle" onclick="toggleTheme()">
@@ -341,132 +432,368 @@
         <div id="chat-box" class="chat-messages"></div>
         <div class="input-container">
             <div class="input-box">
-                <input type="text" id="user-input" placeholder="Type your message..." autofocus>
+                <input type="text" id="user-input" placeholder="Type your query..." autofocus>
+                <button class="mic-btn" onclick="startVoiceRecognition()">
+                    <i class="fas fa-microphone"></i>
+                </button>
                 <button onclick="sendMessage()">Send</button>
             </div>
+            <button class="faq-toggle" onclick="toggleFAQs()">Show FAQs</button>
+            <div class="faq-buttons" id="faq-buttons"></div>
         </div>
     </div>
 
     <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const theme = html.getAttribute('data-theme');
-            const newTheme = theme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
+        document.addEventListener('DOMContentLoaded', function() {
+            let faqPage = 0;
+            const faqsPerPage = 5;
 
-            const icons = document.querySelectorAll('.mobile-theme-toggle i');
-            icons.forEach(icon => {
-                icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-            });
-        }
-
-        function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
-
-        function sendMessage() {
-            let inputField = document.getElementById("user-input");
-            let message = inputField.value.trim();
-            if (message === "") return;
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
 
             let chatBox = document.getElementById("chat-box");
-            chatBox.innerHTML += `
-                <div class="message user">
+            let welcomeMessage = "{{ welcome_message|escapejs }}";
+            if (welcomeMessage) {
+                let welcomeDiv = document.createElement("div");
+                welcomeDiv.className = "message bot";
+                welcomeDiv.setAttribute('data-timestamp', new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+                welcomeDiv.innerHTML = `
+                    <div class="message-icon bot">
+                        <i class="fas fa-robot"></i>
+                    </div>
                     <div class="message-content">
-                        ${escapeHtml(message)}
-                    </div>
-                    <div class="message-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                </div>`;
+                        ${escapeHtml(welcomeMessage)} Click "Show FAQs" to see different questions each time!
+                    </div>`;
+                chatBox.appendChild(welcomeDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
 
-            inputField.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
+            // Explicitly attach functions to window to make them globally accessible
+            window.toggleTheme = function() {
+                const html = document.documentElement;
+                const theme = html.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+                document.querySelectorAll('.mobile-theme-toggle i').forEach(icon => {
+                    icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+                });
+            };
 
-            const typingId = showTypingIndicator();
+            window.toggleMenu = function() {
+                document.querySelector('.nav-links').classList.toggle('active');
+            };
 
-            fetch("/get_response/", {
-                method: "POST",
-                body: JSON.stringify({ message: message }),
-                headers: { "Content-Type": "application/json" }
-            })
-            .then(response => response.json())
-            .then(data => {
-                removeTypingIndicator(typingId);
+            window.toggleFAQs = function() {
+                const faqButtons = document.getElementById('faq-buttons');
+                const toggleBtn = document.querySelector('.faq-toggle');
+                const isActive = faqButtons.classList.contains('active');
+
+                if (!isActive) {
+                    fetchFAQs();
+                    faqButtons.classList.add('active');
+                    toggleBtn.textContent = 'Hide FAQs';
+                } else {
+                    faqButtons.classList.remove('active');
+                    toggleBtn.textContent = 'Show FAQs';
+                }
+            };
+
+            function fetchFAQs() {
+                const url = `/chatbot/get_faqs/?page=${faqPage}&limit=${faqsPerPage}`;
+                console.log("Attempting to fetch FAQs from:", url);
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        "X-CSRFToken": getCookie('csrftoken'),
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Fetched FAQs:", data);
+                    const faqButtons = document.getElementById('faq-buttons');
+                    faqButtons.innerHTML = '';
+
+                    if (data.faqs && data.faqs.length > 0) {
+                        data.faqs.forEach(faq => {
+                            const button = document.createElement('button');
+                            button.className = 'faq-btn';
+                            button.setAttribute('data-id', faq.id);
+                            button.textContent = faq.question;
+                            button.onclick = () => handleFAQClick(faq.id);
+                            faqButtons.appendChild(button);
+                        });
+                        faqPage = (faqPage + 1) % Math.ceil(data.total_faqs / faqsPerPage);
+                    } else {
+                        faqButtons.innerHTML = '<p>No FAQs available.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching FAQs:", error);
+                    const faqButtons = document.getElementById('faq-buttons');
+                    faqButtons.innerHTML = `<p>Error loading FAQs: ${error.message}</p>`;
+                });
+            }
+
+            window.handleFAQClick = function(faqId) {
+                let timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const faqQuestion = document.querySelector(`.faq-btn[data-id="${faqId}"]`).textContent;
                 chatBox.innerHTML += `
-                    <div class="message bot">
-                        <div class="message-icon bot">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="message-content">
-                            ${escapeHtml(data.response)}
-                        </div>
+                    <div class="message user" data-timestamp="${timestamp}">
+                        <div class="message-content">${escapeHtml(faqQuestion)}</div>
+                        <div class="message-icon"><i class="fas fa-user"></i></div>
                     </div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
-            })
-            .catch(error => {
-                removeTypingIndicator(typingId);
+
+                const typingId = showTypingIndicator();
+
+                fetch(`/chatbot/get_sub_faqs/${faqId}/`, {
+                    method: 'GET',
+                    headers: {
+                        "X-CSRFToken": getCookie('csrftoken'),
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    removeTypingIndicator(typingId);
+                    let botTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    let botMessage = document.createElement('div');
+                    botMessage.className = 'message bot';
+                    botMessage.setAttribute('data-timestamp', botTimestamp);
+
+                    if (data.sub_faqs && data.sub_faqs.length > 0) {
+                        let content = 'Here are related questions:<br>';
+                        let childButtons = '<div class="child-faq-buttons">';
+                        data.sub_faqs.forEach(child => {
+                            childButtons += `<button class="child-faq-btn" onclick="sendFAQMessage('${escapeHtml(child.question)}')">${escapeHtml(child.question)}</button>`;
+                        });
+                        childButtons += '</div>';
+                        botMessage.innerHTML = `
+                            <div class="message-icon bot"><i class="fas fa-robot"></i></div>
+                            <div class="message-content">${content}${childButtons}</div>`;
+                    } else if (data.answer) {
+                        botMessage.innerHTML = `
+                            <div class="message-icon bot"><i class="fas fa-robot"></i></div>
+                            <div class="message-content">${escapeHtml(data.answer)}</div>`;
+                    } else {
+                        botMessage.innerHTML = `
+                            <div class="message-icon bot"><i class="fas fa-robot"></i></div>
+                            <div class="message-content">Please type your query for more details.</div>`;
+                    }
+
+                    chatBox.appendChild(botMessage);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    removeTypingIndicator(typingId);
+                    chatBox.innerHTML += `
+                        <div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}">
+                            <div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="message-content">Error loading FAQ details: ${error.message}</div>
+                        </div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                });
+            };
+
+            window.sendMessage = function(isVoice = false) {
+                let inputField = document.getElementById("user-input");
+                let message = inputField.value.trim();
+                if (message === "") return;
+
+                let timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 chatBox.innerHTML += `
-                    <div class="message bot error">
-                        <div class="message-icon bot">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="message-content">
-                            Sorry, there was an error processing your request.
+                    <div class="message user" data-timestamp="${timestamp}">
+                        <div class="message-content">${escapeHtml(message)}</div>
+                        <div class="message-icon"><i class="fas fa-user"></i></div>
+                    </div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                inputField.value = '';
+
+                const typingId = showTypingIndicator();
+
+                fetch("/chatbot/get_response/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken'),
+                        "credentials": "include"
+                    },
+                    body: JSON.stringify({ message: message, is_voice: isVoice })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    removeTypingIndicator(typingId);
+                    let botTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    let botMessage = document.createElement('div');
+                    botMessage.className = 'message bot';
+                    botMessage.setAttribute('data-timestamp', botTimestamp);
+
+                    let content = '';
+
+                    if (data.sub_faqs && data.sub_faqs.length > 0) {
+                        content = 'Here are related questions:<br>';
+                        let childButtons = '<div class="child-faq-buttons">';
+                        data.sub_faqs.forEach(sub_faq => {
+                            childButtons += `<button class="child-faq-btn" onclick="sendFAQMessage('${escapeHtml(sub_faq.question)}')">${escapeHtml(sub_faq.question)}</button>`;
+                        });
+                        childButtons += '</div>';
+                        content += childButtons;
+                        if (isVoice && window.speechSynthesis) speak("Here are related questions");
+                    } else if (data.escalate) {
+                        content = `${escapeHtml(data.contact.message)}<br>`;
+                        content += `<i class="fas fa-phone"></i> <a href="tel:${data.contact.phone}" class="contact-link">${escapeHtml(data.contact.phone)}</a><br>`;
+                        content += `<i class="fas fa-envelope"></i> <a href="mailto:${data.contact.email}" class="contact-link">${escapeHtml(data.contact.email)}</a>`;
+                        if (isVoice && window.speechSynthesis) speak(data.contact.message);
+                    } else {
+                        content = escapeHtml(data.response || "Sorry, I couldn’t find an answer to your query.");
+                        if (isVoice && window.speechSynthesis) speak(content);
+                    }
+
+                    botMessage.innerHTML = `
+                        <div class="message-icon bot"><i class="fas fa-robot"></i></div>
+                        <div class="message-content">${content}</div>`;
+                    chatBox.appendChild(botMessage);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    removeTypingIndicator(typingId);
+                    chatBox.innerHTML += `
+                        <div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}">
+                            <div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="message-content">Error: ${error.message}<br><br>It seems there was an issue. Contact support:<br>
+                                <i class="fas fa-phone"></i> <a href="tel:+1 (234) 567-890" class="contact-link">+1 (234) 567-890</a><br>
+                                <i class="fas fa-envelope"></i> <a href="mailto:support@conversa.com" class="contact-link">support@conversa.com</a></div>
+                        </div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                });
+            };
+
+            window.sendFAQMessage = function(question) {
+                document.getElementById("user-input").value = question;
+                sendMessage();
+            };
+
+            function showTypingIndicator() {
+                const id = 'typing-' + Date.now();
+                const chatBox = document.getElementById('chat-box');
+                const typingDiv = document.createElement('div');
+                typingDiv.id = id;
+                typingDiv.className = 'message bot';
+                typingDiv.innerHTML = `
+                    <div class="message-icon bot">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="typing-animation">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
                         </div>
                     </div>`;
-                console.error("Error:", error);
+                chatBox.appendChild(typingDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                return id;
+            }
+
+            function removeTypingIndicator(id) {
+                const element = document.getElementById(id);
+                if (element) element.remove();
+            }
+
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            window.startVoiceRecognition = function() {
+                const micBtn = document.querySelector('.mic-btn');
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    chatBox.innerHTML += `
+                        <div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}">
+                            <div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="message-content">Speech recognition is not supported in this browser.</div>
+                        </div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    return;
+                }
+
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = () => {
+                    micBtn.classList.add('active');
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById("user-input").value = transcript;
+                    sendMessage(true);
+                };
+
+                recognition.onerror = (event) => {
+                    micBtn.classList.remove('active');
+                    chatBox.innerHTML += `
+                        <div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}">
+                            <div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="message-content">Speech recognition failed: ${event.error}</div>
+                        </div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                };
+
+                recognition.onend = () => {
+                    micBtn.classList.remove('active');
+                };
+
+                recognition.start();
+            };
+
+            window.speak = function(text) {
+                const synth = window.speechSynthesis;
+                if (synth) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    synth.speak(utterance);
+                }
+            };
+
+            document.getElementById("user-input").addEventListener("keypress", function(e) {
+                if (e.key === "Enter") sendMessage();
             });
-        }
 
-        function showTypingIndicator() {
-            const id = 'typing-' + Date.now();
-            const chatBox = document.getElementById('chat-box');
-
-            const typingDiv = document.createElement('div');
-            typingDiv.id = id;
-            typingDiv.className = 'message bot';
-            typingDiv.innerHTML = `
-                <div class="message-icon bot">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="message-content">
-                    <div class="typing-animation">
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                    </div>
-                </div>
-            `;
-
-            chatBox.appendChild(typingDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-            return id;
-        }
-
-        function removeTypingIndicator(id) {
-            document.getElementById(id)?.remove();
-        }
-
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        document.getElementById("user-input").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") {
-                sendMessage();
-            }
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.navbar')) {
-                document.querySelector('.nav-links').classList.remove('active');
-            }
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.navbar')) {
+                    document.querySelector('.nav-links').classList.remove('active');
+                }
+            });
         });
     </script>
 </body>

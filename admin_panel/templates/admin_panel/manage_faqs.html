@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage FAQs - CONVERSA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #171923;
+            --bg-secondary: #252a41;
+            --nav-bg: #1f2537;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #60a5fa;
+            --card-bg: #1f2537;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            --success: #34d399;
+            --warning: #fbbf24;
+            --error: #f87171;
+            --nav-hover: rgba(96, 165, 250, 0.15);
+            --nav-active: rgba(96, 165, 250, 0.25);
+            --clear-btn: #f87171;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --nav-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #3b82f6;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --nav-hover: rgba(59, 130, 246, 0.1);
+            --nav-active: rgba(59, 130, 246, 0.2);
+            --clear-btn: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navbar styles copied directly from dashboard.html */
+        .navbar {
+            background-color: var(--nav-bg);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            opacity: 0.85;
+        }
+
+        .navbar-nav {
+            gap: 0.75rem;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background-color: var(--nav-hover);
+            color: var(--accent);
+        }
+
+        .nav-link.active {
+            background-color: var(--nav-active);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 2px;
+            left: 50%;
+            background-color: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 60%;
+            left: 20%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--nav-hover);
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* Rest of the page styles */
+        .faq-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .faq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .faq-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .form-container {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            color: white; /* Ensure visibility */
+            font-weight: 500;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+        }
+
+        .btn-accent:hover {
+            background-color: #4a90e2; /* Slightly darker shade for hover */
+            opacity: 0.9;
+            color: white; /* Maintain visibility */
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .faq-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .faq-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .faq-card h5 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-card .faq-parent {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-warning:hover, .btn-danger:hover {
+            opacity: 0.9;
+            color: white;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .modal-header, .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            color: var(--accent);
+        }
+
+        .btn-close {
+            filter: invert(1);
+        }
+
+        @media (max-width: 768px) {
+            .faq-container {
+                padding: 1rem;
+            }
+            .faq-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .navbar-nav {
+                gap: 0.5rem;
+            }
+            .nav-link {
+                padding: 0.5rem 1rem;
+            }
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar copied directly from dashboard.html -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'admin_panel:dashboard' %}">Chatbot Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'chatbot_project:homepage' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'admin_panel:dashboard' %}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'admin_panel:manage_faqs' %}">Manage FAQs</a></li>
+                </ul>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="faq-container">
+        <div class="faq-header">
+            <h2>Manage FAQs</h2>
+        </div>
+
+        <!-- Add FAQ Form -->
+        <div class="form-container">
+            <form method="POST" class="mb-3">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_question">Question</label>
+                    {{ form.question }}
+                </div>
+                <div class="form-group">
+                    <label for="id_answer">Answer</label>
+                    {{ form.answer }}
+                </div>
+                <div class="form-group">
+                    <label for="id_parent">Parent FAQ (optional)</label>
+                    {{ form.parent }}
+                </div>
+                <button type="submit" class="btn btn-accent">Add New FAQ</button>
+            </form>
+        </div>
+
+        <div class="faq-grid">
+            {% for faq in faqs %}
+                <div class="faq-card">
+                    <h5 class="faq-question">{{ faq.question }}</h5>
+                    {% if faq.answer %}
+                        <p class="faq-answer">{{ faq.answer }}</p>
+                    {% else %}
+                        <p class="faq-answer">No answer provided</p>
+                    {% endif %}
+                    {% if faq.parent %}
+                        <span class="faq-parent">Parent: {{ faq.parent.question }}</span>
+                    {% endif %}
+                    <div class="actions mt-2">
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editFaqModal"
+                                data-faq-id="{{ faq.id }}" data-faq-question="{{ faq.question }}"
+                                data-faq-answer="{{ faq.answer|default:'' }}" data-faq-parent="{{ faq.parent.id|default:'' }}">
+                            Edit
+                        </button>
+                        <form method="POST" action="{% url 'admin_panel:delete_faq' faq.id %}" style="display: inline-block;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info w-100 text-center">No FAQs available yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal for Editing FAQ -->
+    <div class="modal fade" id="editFaqModal" tabindex="-1" aria-labelledby="editFaqModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editFaqModalLabel">Edit FAQ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editFaqForm" method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" id="faq_id" name="faq_id">
+                        <div class="form-group mb-3">
+                            <label for="edit_faq_question" class="form-label">FAQ Question</label>
+                            <input type="text" class="form-control" id="edit_faq_question" name="question" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="edit_faq_answer" class="form-label">FAQ Answer</label>
+                            <textarea class="form-control" id="edit_faq_answer" name="answer" rows="4"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="edit_faq_parent" class="form-label">Parent FAQ (optional)</label>
+                            <select class="form-control" id="edit_faq_parent" name="parent">
+                                <option value="">None</option>
+                                {% for faq in faqs %}
+                                    <option value="{{ faq.id }}">{{ faq.question }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-accent">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            const themeToggle = document.querySelector('.theme-toggle');
+            themeToggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var editFaqModal = document.getElementById("editFaqModal");
+
+            editFaqModal.addEventListener("show.bs.modal", function (event) {
+                var button = event.relatedTarget;
+
+                var faqId = button.getAttribute("data-faq-id");
+                var faqQuestion = button.getAttribute("data-faq-question");
+                var faqAnswer = button.getAttribute("data-faq-answer");
+                var faqParent = button.getAttribute("data-faq-parent") || "";
+
+                document.getElementById("faq_id").value = faqId;
+                document.getElementById("edit_faq_question").value = faqQuestion;
+                document.getElementById("edit_faq_answer").value = faqAnswer;
+                document.getElementById("edit_faq_parent").value = faqParent;
+
+                var form = document.getElementById("editFaqForm");
+                form.action = `/admin_panel/edit_faq/${faqId}/`;
+            });
+        });
+    </script>
+</body>
+</html>

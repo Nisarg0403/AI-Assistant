@@ -73,4 +73,5 @@ knowledge = {
     "How does the human digestive system work?": "The digestive system breaks down food into nutrients the body can use. It involves ingestion (eating), digestion (breaking down food mechanically and chemically), absorption (nutrients entering the bloodstream), and excretion (eliminating waste).",
 
     "What are some effective time management strategies?": "Effective time management strategies include prioritizing tasks, setting clear goals, using to-do lists, avoiding procrastination, delegating when possible, and scheduling breaks to maintain focus."
+
 }

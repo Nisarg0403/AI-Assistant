@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Theme Customization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e1e2e, #3a3a56);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .settings-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 25px;
+            width: 420px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        input[type="color"] {
+            height: 40px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6a5acd, #8a2be2);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #8a2be2, #6a5acd);
+            transform: scale(1.05);
+        }
+
+        /* Live Preview Box */
+        .preview-box {
+            margin-top: 20px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h2>Chatbot Theme Customization</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <label for="primary_background_color">Primary Background Color:</label>
+                <input type="color" id="primary_background_color" name="primary_background_color" value="{{ theme.primary_background_color }}" onchange="updatePreview()">
+            </div>
+
+            <div class="input-group">
+                <label for="text_color">Text Color:</label>
+                <input type="color" id="text_color" name="text_color" value="{{ theme.text_color }}" onchange="updatePreview()">
+            </div>
+
+            <div class="input-group">
+                <label for="font_family">Font Family:</label>
+                <select id="font_family" name="font_family" onchange="updatePreview()">
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Poppins" selected>Poppins</option>
+                    <option value="Roboto">Roboto</option>
+                </select>
+            </div>
+
+            <div class="preview-box" id="preview-box">Live Preview</div>
+
+            <button type="submit">Save Settings</button>
+        </form>
+    </div>
+
+    <script>
+        function updatePreview() {
+            let bgColor = document.getElementById('primary_background_color').value;
+            let textColor = document.getElementById('text_color').value;
+            let fontFamily = document.getElementById('font_family').value;
+
+            let previewBox = document.getElementById('preview-box');
+            previewBox.style.backgroundColor = bgColor;
+            previewBox.style.color = textColor;
+            previewBox.style.fontFamily = fontFamily;
+        }
+    </script>
+</body>
+</html>

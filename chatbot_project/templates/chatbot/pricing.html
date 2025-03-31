@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - CONVERSA Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    <style>
+        :root {
+            /* Match homepage.html color palette */
+            --bg-primary: #1E1E1E;
+            --bg-secondary: #121212;
+            --accent-blue: #00A8E8;
+            --accent-cyan: #00E6E6;
+            --accent-purple: #B388EB;
+            --accent-magenta: #FF3CAC;
+            --text-primary: #E0E0E0;
+            --text-secondary: #A0A0A0;
+            --gradient: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: var(--gradient);
+            z-index: 1002;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: var(--bg-secondary);
+            box-shadow: 0 4px 20px var(--shadow-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1001;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-cyan);
+            background: var(--glass-bg);
+            box-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle div {
+            width: 30px;
+            height: 3px;
+            background: var(--accent-blue);
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+
+        .pricing-section {
+            padding: clamp(80px, 15vh, 100px) 5%;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(45deg, var(--bg-primary), var(--bg-secondary));
+            overflow: hidden;
+        }
+
+        .pricing-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0.05;
+            animation: wave 15s infinite;
+            z-index: 0;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-100%) skewX(-30deg); }
+            100% { transform: translateX(100%) skewX(-30deg); }
+        }
+
+        .pricing-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            z-index: 1;
+        }
+
+        .pricing-section p {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: var(--text-secondary);
+            z-index: 1;
+        }
+
+        .pricing-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .pricing-card {
+            width: clamp(280px, 33%, 350px);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 25px var(--shadow-color);
+        }
+
+        .pricing-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: var(--accent-cyan);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card .price {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pricing-card .price span {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 5px;
+            -webkit-text-fill-color: var(--text-secondary);
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .pricing-card ul li {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-card ul li::before {
+            content: "✓";
+            color: var(--accent-blue);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .pricing-card .buy-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: var(--gradient);
+            color: black;
+            box-shadow: 0 0 5px var(--accent-blue);
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .pricing-card .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .pricing-card {
+                width: clamp(280px, 80%, 400px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--bg-secondary);
+                padding: 15px 0;
+            }
+            nav ul.active {
+                display: flex;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .pricing-section h1 {
+                font-size: 1.8rem;
+            }
+            .pricing-section p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pricing-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <nav>
+            <div class="logo">CONVERSA</div>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <ul>
+                <li><a href="{% url 'chatbot_project:homepage' %}">Home</a></li>
+                <li><a href="{% url 'chatbot_project:pricing' %}">Pricing</a></li>
+                <li><a href="{% url 'admin_panel:dashboard' %}">Access Dashboard</a></li>
+            </ul>
+        </nav>
+
+    <section class="pricing-section">
+        <h1>Pricing Plans</h1>
+        <p>Choose the perfect plan to enhance your website with CONVERSA’s smart chatbot.</p>
+        <div class="pricing-grid">
+            <!-- Basic Plan -->
+            <div class="pricing-card">
+                <h2>Basic</h2>
+                <div class="price">₹4,000<span>One-Time</span></div>
+                <ul>
+                    <li>24/7 Chatbot Support</li>
+                    <li>Basic FAQ Management</li>
+                    <li>1 Website Integration</li>
+                    <li>Email Support</li>
+                </ul>
+                <a href="#" class="buy-btn" data-plan="basic">Buy Now</a>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card">
+                <h2>Pro</h2>
+                <div class="price">₹8,000<span>One-Time</span></div>
+                <ul>
+                    <li>24/7 Chatbot Support</li>
+                    <li>Advanced FAQ Management</li>
+                    <li>3 Website Integrations</li>
+                    <li>Analytics Dashboard</li>
+                    <li>Priority Email Support</li>
+                </ul>
+                <a href="#" class="buy-btn" data-plan="pro">Buy Now</a>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <h2>Enterprise</h2>
+                <div class="price">₹16,000<span>One-Time</span></div>
+                <ul>
+                    <li>24/7 Chatbot Support</li>
+                    <li>Unlimited FAQ Management</li>
+                    <li>Unlimited Website Integrations</li>
+                    <li>Full Analytics Dashboard</li>
+                    <li>Custom Branding</li>
+                    <li>24/7 Phone & Email Support</li>
+                </ul>
+                <a href="#" class="buy-btn" data-plan="enterprise">Buy Now</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+
+
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navUl = document.querySelector('nav ul');
+        menuToggle.addEventListener('click', () => {
+            navUl.classList.toggle('active');
+        });
+
+        // Placeholder for Razorpay (to be integrated later)
+        document.querySelectorAll('.buy-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const plan = button.getAttribute('data-plan');
+                alert(`Proceed to buy the ${plan} plan with Razorpay! (Integration pending)`);
+            });
+        });
+
+        // Anime.js Animation for Pricing Cards
+        anime({
+            targets: '.pricing-card',
+            translateY: [50, 0],
+            opacity: [0, 1],
+            duration: 1000,
+            delay: anime.stagger(200),
+            easing: 'easeOutQuad'
+        });
+    </script>
+</body>
+</html>

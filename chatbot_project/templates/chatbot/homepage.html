@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONVERSA - Smart Chatbot with Voice Interaction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <style>
+        :root {
+            /* Refined Color Palette */
+            --bg-primary: #1E1E1E;      /* Deep Gray */
+            --bg-secondary: #121212;    /* Charcoal Black */
+            --accent-blue: #00A8E8;     /* Neon Blue (subtle) */
+            --accent-cyan: #00E6E6;     /* Cyan (subtle) */
+            --accent-purple: #B388EB;   /* Soft Purple */
+            --accent-magenta: #FF3CAC;  /* Magenta */
+            --text-primary: #E0E0E0;    /* Off-White */
+            --text-secondary: #A0A0A0;  /* Lighter Gray */
+            --gradient: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: var(--gradient);
+            z-index: 1002;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: var(--bg-secondary);
+            box-shadow: 0 4px 20px var(--shadow-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1001;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-cyan);
+            background: var(--glass-bg);
+            box-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle div {
+            width: 30px;
+            height: 3px;
+            background: var(--accent-blue);
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+
+        section {
+            padding: clamp(40px, 8vw, 60px) 5%;
+            background: var(--bg-primary);
+        }
+
+        section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        section h2:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            align-items: center;
+            padding: clamp(80px, 15vh, 100px) 5%;
+            min-height: 100vh;
+            position: relative;
+            background: linear-gradient(45deg, var(--bg-primary), var(--bg-secondary));
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0.05;
+            animation: wave 15s infinite;
+            z-index: 0;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-100%) skewX(-30deg); }
+            100% { transform: translateX(100%) skewX(-30deg); }
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            max-width: 600px;
+            margin-bottom: 30px;
+            color: var(--text-secondary);
+            z-index: 1;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+        }
+
+        .hero button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: var(--gradient);
+            color: var(--text-primary);
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        .hero button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .hero button:last-child {
+            background: transparent;
+            border: 2px solid var(--accent-blue);
+            box-shadow: none;
+        }
+
+        .hero button:last-child:hover {
+            background: var(--accent-blue);
+            color: var(--text-primary);
+            box-shadow: 0 0 10px var(--accent-blue);
+        }
+
+        .overview, .objectives, .tech-highlights, .journey, .demo, .team, .future {
+            text-align: center;
+        }
+
+        .overview-summary, .overview-details {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            max-width: 800px;
+            margin: 0 auto 20px;
+            color: var(--text-secondary);
+        }
+
+        .read-more {
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: var(--accent-purple);
+            color: var(--text-primary);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            box-shadow: 0 0 5px var(--accent-purple);
+        }
+
+        .read-more:hover {
+            background: var(--accent-magenta);
+            box-shadow: 0 0 10px var(--accent-magenta);
+            transform: scale(1.05);
+        }
+
+        .objective-list, .tech-grid, .demo-gallery, .team-members, .future-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .objective-item, .tech-card, .demo-item, .team-member, .future-item {
+            width: clamp(200px, 45%, 300px);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            min-height: 180px; /* Ensure enough space for content */
+        }
+
+        .objective-item:hover, .tech-card:hover, .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .objective-item h3, .tech-card h3, .future-item h3, .team-member h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .objective-item p, .tech-card p, .future-item p, .team-member p {
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            color: var(--text-secondary);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-height: 100px; /* Prevent overflow */
+            overflow: hidden;
+        }
+
+        .objective-item .objective-front {
+            padding: 0; /* Remove extra padding to fit content */
+        }
+
+        .tech-card i {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+        }
+
+        .journey-steps {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .journey-step {
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .journey-step::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--gradient);
+        }
+
+        .journey-step::after {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+        .demo-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: transform 0.3s;
+        }
+
+        .demo-item img:hover {
+            transform: scale(1.05);
+        }
+
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1003;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--accent-blue);
+        }
+
+        #lightbox button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-blue);
+            color: var(--text-primary);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        .prototype-notice {
+            padding: 20px;
+            text-align: center;
+            background: var(--gradient);
+            color: black;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: var(--bg-secondary);
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .progress-bar div {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 5px;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        #chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: clamp(50px, 10vw, 60px);
+            height: clamp(50px, 10vw, 60px);
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-blue);
+            z-index: 2000;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px var(--accent-blue); }
+            50% { box-shadow: 0 0 15px var(--accent-cyan); }
+        }
+
+        #chatbot-widget:hover {
+            transform: scale(1.1);
+        }
+
+        #chatbot-widget i {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: var(--text-primary);
+        }
+
+        #chatbot-box {
+            display: none;
+            position: fixed;
+            bottom: clamp(70px, 15vh, 90px);
+            right: 20px;
+            width: clamp(300px, 90vw, 400px);
+            height: clamp(400px, 80vh, 500px);
+            background: var(--glass-bg);
+            border-radius: 20px;
+            flex-direction: column;
+            box-shadow: 0 4px 25px var(--shadow-color);
+            z-index: 1999;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        #chatbot-box.active {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: 10px 20px;
+            background: var(--gradient);
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        .chat-header div {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-header .minimize-btn, .chat-header .close-btn {
+            background: none;
+            border: none;
+            color: black;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            margin: 0 10px;
+            word-wrap: break-word;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .user .message-content {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-magenta));
+        }
+
+        .message-content::after {
+            content: attr(data-timestamp);
+            display: block;
+            font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .message-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: var(--text-primary);
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        .input-container {
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--glass-border);
+            position: sticky;
+            bottom: 0;
+        }
+
+        .input-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-size: clamp(14px, 2vw, 16px);
+            backdrop-filter: blur(10px);
+        }
+
+        button.send-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: var(--gradient);
+            color: black;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        button.send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .mic-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            cursor: pointer;
+        }
+
+        .mic-btn.active {
+            color: var(--accent-magenta);
+        }
+
+        .mic-btn.listening::after {
+            content: 'Listening...';
+            font-size: 0.8rem;
+            color: var(--accent-magenta);
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .faq-toggle {
+            padding: 8px 16px;
+            background: var(--accent-purple);
+            color: black;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 0;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 0 5px var(--accent-purple);
+        }
+
+        .faq-toggle:hover {
+            background: var(--accent-magenta);
+            box-shadow: 0 0 10px var(--accent-magenta);
+            transform: scale(1.05);
+        }
+
+        .faq-buttons {
+            display: none;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--glass-border);
+            justify-content: center;
+        }
+
+        .faq-buttons.active {
+            display: flex;
+        }
+
+        .faq-btn, .child-faq-btn {
+            padding: 8px 16px;
+            background: var(--gradient);
+            color: black;
+            border: none;
+            border-radius: 20px;
+            font-size: clamp(12px, 2vw, 14px);
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        .faq-btn:hover, .child-faq-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .child-faq-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .contact-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .contact-link:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+        .error-notice {
+            background: var(--accent-magenta);
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px auto;
+            max-width: 90%;
+            text-align: center;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            box-shadow: 0 0 5px var(--accent-magenta);
+        }
+
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; }
+            .objective-item, .tech-card, .demo-item, .team-member, .future-item { width: 45%; }
+        }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; width: 100%; background: var(--bg-secondary); padding: 15px 0; }
+            nav ul.active { display: flex; }
+            .menu-toggle { display: flex; }
+            .hero-btns { flex-direction: column; gap: 15px; }
+            .objective-item, .tech-card, .demo-item, .team-member, .future-item { width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero p { font-size: 0.9rem; }
+            section h2 { font-size: 1.5rem; }
+            #chatbot-box { width: 95vw; height: 85vh; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .typing-animation {
+            display: flex;
+            gap: 4px;
+            padding: 8px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress"></div>
+    <header>
+        <nav>
+            <div class="logo">CONVERSA</div>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <ul>
+                <li><a href="{% url 'chatbot_project:homepage' %}">Home</a></li>
+                <li><a href="{% url 'chatbot_project:pricing' %}">Pricing</a></li>
+                <li><a href="{% url 'admin_panel:dashboard' %}">Access Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div>
+            <h1>CONVERSA: A Smart Chatbot with Voice Interaction</h1>
+            <p>Built as a college project to explore customer support automation with AI-driven voice features and lead identification.</p>
+            <div class="hero-btns">
+                <button onclick="openChatbotFullPage()">Open CONVERSA</button>
+                <button onclick="redirectToDashboard()">Access Dashboard</button>
+            </div>
+        </div>
+        <div id="hero-chat-preview" class="chat-messages" style="max-width: 300px; background: var(--glass-bg); border-radius: 15px; padding: 15px; backdrop-filter: blur(10px); border: 1px solid var(--glass-border);">
+            <div class="message bot">
+                <div class="message-icon bot"><i class="fas fa-robot"></i></div>
+                <div class="message-content">Hi! How can I help you today?</div>
+            </div>
+            <div class="message user">
+                <div class="message-content">Tell me about CONVERSA</div>
+                <div class="message-icon"><i class="fas fa-user"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="overview">
+        <h2>About This Project</h2>
+        <p class="overview-summary">CONVERSA is a smart chatbot designed for real-time customer query handling with AI-driven voice interaction and lead identification.</p>
+        <p class="overview-details" style="display: none;">This project leverages the Web Speech API for voice capabilities, a keyword-based FAQ system for dynamic responses, and an analytics dashboard to provide actionable business insights.</p>
+        <button class="read-more" onclick="toggleDetails(this)">Read More</button>
+    </section>
+
+    <section class="objectives">
+        <h2>Project Goals</h2>
+        <div class="objective-list">
+            <div class="objective-item">
+                <div class="objective-front">
+                    <h3>Interactive Chatbot</h3>
+                    <p>Create a responsive chatbot that supports text and voice input for seamless user interaction.</p>
+                </div>
+            </div>
+            <div class="objective-item">
+                <div class="objective-front">
+                    <h3>Dynamic FAQs</h3>
+                    <p>Implement a database-driven FAQ system with parent-child relationships for detailed responses.</p>
+                </div>
+            </div>
+            <div class="objective-item">
+                <div class="objective-front">
+                    <h3>Analytics Dashboard</h3>
+                    <p>Visualize query data with an analytics dashboard, including lead insights to demonstrate business value.</p>
+                </div>
+            </div>
+            <div class="objective-item">
+                <div class="objective-front">
+                    <h3>Lead Identification</h3>
+                    <p>Detect engaged users using keyword-based rules to identify potential leads.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tech-highlights">
+        <h2>Technical Highlights</h2>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <i class="fab fa-python"></i>
+                <h3>Django & Python</h3>
+                <p>Backend powered by Django framework.</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-exchange-alt"></i>
+                <h3>AJAX Integration</h3>
+                <p>Real-time chat updates.</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-microphone"></i>
+                <h3>Voice Recognition</h3>
+                <p>Web Speech API for AI-driven voice input.</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-code"></i>
+                <h3>Lead Detection</h3>
+                <p>Keyword-based rules to identify engaged users.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="journey">
+        <h2>Development Journey</h2>
+        <div class="journey-steps">
+            <div class="journey-step">
+                <h3>Step 1: UI Design</h3>
+                <p>Designed a sleek, modern user interface using HTML, CSS, and Anime.js to create an engaging and intuitive experience with smooth animations and responsive layouts.</p>
+            </div>
+            <div class="journey-step">
+                <h3>Step 2: Backend Setup</h3>
+                <p>Developed the backend using Django and Python, establishing a robust foundation for handling chatbot logic, database interactions, and API integrations.</p>
+            </div>
+            <div class="journey-step">
+                <h3>Step 3: Chat Logic Implementation</h3>
+                <p>Built the chat logic by initially exploring spaCy for NLP, then opting for a precise word-matching approach, and integrating AI-driven voice input and lead detection capabilities.</p>
+            </div>
+            <div class="journey-step">
+                <h3>Step 4: Testing and Refinement</h3>
+                <p>Performed extensive testing to refine the user experience and analytics dashboard, incorporating user feedback to optimize performance and functionality.</p>
+            </div>
+        </div>
+    </section>
+
+    {% load static %}
+    <section class="demo">
+        <h2>Demo Screenshots</h2>
+        <div class="demo-gallery">
+            <div class="demo-item" onclick="openLightbox(this.querySelector('img').src)">
+                <img src="{% static 'images/Chat.png' %}" alt="Chat Interface" class="loading">
+            </div>
+            <div class="demo-item" onclick="openLightbox(this.querySelector('img').src)">
+                <img src="{% static 'images/Manage_faq.png' %}" alt="Dashboard" class="loading">
+            </div>
+            <div class="demo-item" onclick="openLightbox(this.querySelector('img').src)">
+                <img src="{% static 'images/Dashboard.png' %}" alt="Dashboard" class="loading">
+            </div>
+        </div>
+    </section>
+
+    <div id="lightbox">
+        <img id="lightbox-img">
+        <button onclick="closeLightbox()">✕</button>
+    </div>
+
+    <div class="prototype-notice">
+        Prototype in Development – Click the Chat Icon to Test!
+    </div>
+
+    <section class="team">
+        <h2>Developed By</h2>
+        <div class="team-members">
+            <div class="team-member">
+                <h3>Nisarg Vakharia</h3>
+                <p>BADMOSSHHHH</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="future">
+        <h2>What's Next?</h2>
+        <div class="future-list">
+            <div class="future-item">
+                <h3>NLP Integration</h3>
+                <p>Enhance with machine learning-based natural language processing.</p>
+
+            </div>
+            <div class="future-item">
+                <h3>Mobile App</h3>
+                <p>Develop a mobile version for broader accessibility.</p>
+
+            </div>
+            <div class="future-item">
+                <h3>Lead Scalability</h3>
+                <p>Integrate with CRM for advanced lead management.</p>
+
+            </div>
+        </div>
+    </section>
+
+    <div id="chatbot-widget">
+        <i class="fas fa-comment"></i>
+    </div>
+
+    <div id="chatbot-box">
+        <div class="chat-header">
+            <span>Chat with <b>CONVERSA</b></span>
+            <div>
+                <button class="minimize-btn" onclick="minimizeChat()">–</button>
+                <button class="close-btn" onclick="toggleChat()">✕</button>
+            </div>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="input-container">
+            <div class="input-box">
+                <input type="text" id="user-input" placeholder="Type your query..." autofocus>
+                <button class="mic-btn" onclick="startVoiceRecognition()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+            <button class="faq-toggle" onclick="toggleFAQs()" aria-label="Toggle FAQs">Show FAQs</button>
+            <div class="faq-buttons" id="faq-buttons">
+                {% for faq in faqs %}
+                    <button class="faq-btn" data-id="{{ faq.id }}" onclick="handleFAQClick('{{ faq.id }}')">{{ faq.question }}</button>
+                {% empty %}
+                    <p>No FAQs available. Please add some in the admin panel.</p>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentUtterance = null;
+        const initialFaqs = [
+            {% for faq in faqs|slice:":4" %}
+                { id: '{{ faq.id }}', question: '{{ faq.question|escapejs }}', hasChildren: {% if faq.children.exists %}true{% else %}false{% endif %}, answer: '{{ faq.answer|escapejs }}' },
+            {% endfor %}
+        ];
+        let faqCache = [...initialFaqs];
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function toggleMenu() {
+            document.querySelector("nav ul").classList.toggle("active");
+        }
+
+        function toggleChat() {
+            const chatBox = document.getElementById('chatbot-box');
+            const isActive = chatBox.classList.contains('active');
+            if (!isActive) {
+                chatBox.classList.add('active');
+                chatBox.style.display = 'flex';
+                anime({ targets: '#chatbot-box', translateY: [100, 0], opacity: [0, 1], duration: 500, easing: 'easeOutQuad' });
+            } else {
+                anime({ targets: '#chatbot-box', translateY: [0, 100], opacity: [1, 0], duration: 500, easing: 'easeOutQuad', complete: () => {
+                    chatBox.classList.remove('active');
+                    chatBox.style.display = 'none';
+                }});
+            }
+        }
+
+        function openChatbotFullPage() {
+            window.location.href = "{% url 'chatbot_project:chatbot_home' %}";
+        }
+
+        function redirectToDashboard() {
+            window.location.href = "{% url 'chatbot_auth:signup_signin' %}";
+        }
+
+        function toggleDetails(button) {
+            const details = button.previousElementSibling;
+            const isHidden = details.style.display === 'none';
+            details.style.display = isHidden ? 'block' : 'none';
+            button.textContent = isHidden ? 'Read Less' : 'Read More';
+            anime({ targets: details, opacity: isHidden ? [0, 1] : [1, 0], height: isHidden ? ['0px', 'auto'] : ['auto', '0px'], duration: 500, easing: 'easeInOutQuad' });
+        }
+
+        function toggleFAQs() {
+            const faqButtons = document.getElementById('faq-buttons');
+            const toggleBtn = document.querySelector('.faq-toggle');
+            faqButtons.classList.toggle('active');
+            toggleBtn.textContent = faqButtons.classList.contains('active') ? 'Hide FAQs' : 'Show FAQs';
+        }
+
+        function refreshFAQs() {
+            fetch('/chatbot/get_faqs/?page=0&limit=4', {
+                method: 'GET',
+                headers: { "X-CSRFToken": getCookie('csrftoken'), "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                faqCache = data.faqs;
+                const faqButtons = document.getElementById('faq-buttons');
+                faqButtons.innerHTML = faqCache.length ? faqCache.map(faq =>
+                    `<button class="faq-btn" data-id="${faq.id}" onclick="handleFAQClick('${faq.id}')">${escapeHtml(faq.question)}</button>`
+                ).join('') : '<p>No FAQs available. Please add some in the admin panel.</p>';
+            })
+            .catch(error => {
+                console.error('Error refreshing FAQs:', error);
+                document.getElementById('faq-buttons').innerHTML += `<div class="error-notice">Failed to refresh FAQs: ${error.message}</div>`;
+            });
+        }
+
+        function handleFAQClick(faqId) {
+            const faq = faqCache.find(f => f.id === faqId);
+            if (!faq) return;
+            let timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let chatBox = document.getElementById("chat-messages");
+            chatBox.innerHTML += `<div class="message user" data-timestamp="${timestamp}"><div class="message-content">${escapeHtml(faq.question)}</div><div class="message-icon"><i class="fas fa-user"></i></div></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            const typingId = showTypingIndicator();
+            fetch(`/chatbot/get_sub_faqs/${faqId}/`, {
+                method: 'GET',
+                headers: { "X-CSRFToken": getCookie('csrftoken'), "Content-Type": "application/json" }
+            })
+            .then(response => { if (!response.ok) throw new Error('Network response was not ok'); return response.json(); })
+            .then(data => {
+                removeTypingIndicator(typingId);
+                let botTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                let botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                botMessage.setAttribute('data-timestamp', botTimestamp);
+                let content = faq.answer ? escapeHtml(faq.answer) : 'Here are related questions:<br>';
+                if (data.sub_faqs && data.sub_faqs.length > 0) {
+                    let childButtons = '<div class="child-faq-buttons">';
+                    data.sub_faqs.forEach(child => {
+                        childButtons += `<button class="child-faq-btn" onclick="sendFAQMessage('${escapeHtml(child.question)}')">${escapeHtml(child.question)}</button>`;
+                    });
+                    childButtons += '</div>';
+                    content += childButtons;
+                } else if (!faq.answer) {
+                    content = "No additional details available. Please type your query for more help.";
+                }
+                botMessage.innerHTML = `<div class="message-icon bot"><i class="fas fa-robot"></i></div><div class="message-content">${content}</div>`;
+                chatBox.appendChild(botMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                anime({ targets: botMessage, opacity: [0, 1], translateY: [20, 0], duration: 500, easing: 'easeOutQuad' });
+            })
+            .catch(error => {
+                removeTypingIndicator(typingId);
+                chatBox.innerHTML += `<div class="message bot error" data-timestamp="${botTimestamp}"><div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div><div class="message-content">Error loading FAQ details: ${error.message}</div></div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+
+       function sendMessage(isVoice = false) {
+    const inputField = document.getElementById("user-input");
+    const message = inputField.value.trim();
+    if (!message) return;
+
+    const chatBox = document.getElementById("chat-messages");
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    chatBox.innerHTML += `<div class="message user" data-timestamp="${timestamp}"><div class="message-content">${escapeHtml(message)}</div><div class="message-icon"><i class="fas fa-user"></i></div></div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+    inputField.value = '';
+
+    const typingId = showTypingIndicator();
+    fetch("/chatbot/get_response/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken') },
+        body: JSON.stringify({ message, is_voice: isVoice })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
+    })
+    .then(data => {
+        removeTypingIndicator(typingId);
+        const botTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const botMessage = document.createElement('div');
+        botMessage.className = 'message bot';
+        botMessage.setAttribute('data-timestamp', botTimestamp);
+        let contentForDisplay = ''; // Escaped for HTML display
+        let contentForSpeech = ''; // Plain text for speech
+
+        console.log("Full response data:", data);
+
+        if (data.sub_faqs && data.sub_faqs.length > 0) {
+            contentForDisplay = 'Here are related questions:<br>';
+            let childButtons = '<div class="child-faq-buttons">';
+            data.sub_faqs.forEach(sub_faq => {
+                childButtons += `<button class="child-faq-btn" onclick="sendFAQMessage('${escapeHtml(sub_faq.question)}')">${escapeHtml(sub_faq.question)}</button>`;
+            });
+            childButtons += '</div>';
+            contentForDisplay += childButtons;
+            contentForSpeech = "Here are related questions";
+            if (isVoice) speak(contentForSpeech);
+        } else if (data.response) {
+            contentForDisplay = escapeHtml(data.response);
+            contentForSpeech = data.response; // Unescaped for speech
+            if (isVoice) speak(contentForSpeech);
+        } else if (data.escalate) {
+            contentForDisplay = `${escapeHtml(data.contact.message)}<br>`;
+            contentForDisplay += `<i class="fas fa-phone"></i> <a href="tel:${data.contact.phone}" class="contact-link">${escapeHtml(data.contact.phone)}</a><br>`;
+            contentForDisplay += `<i class="fas fa-envelope"></i> <a href="mailto:${data.contact.email}" class="contact-link">${escapeHtml(data.contact.email)}</a>`;
+            contentForSpeech = data.contact.message;
+            if (isVoice) speak(contentForSpeech);
+        } else {
+            contentForDisplay = escapeHtml("Sorry, I couldn't process your request.");
+            contentForSpeech = "Sorry, I couldn't process your request.";
+            if (isVoice) speak(contentForSpeech);
+        }
+
+        botMessage.innerHTML = `<div class="message-icon bot"><i class="fas fa-robot"></i></div><div class="message-content">${contentForDisplay}</div>`;
+        chatBox.appendChild(botMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        anime({ targets: botMessage, opacity: [0, 1], translateY: [20, 0], duration: 500, easing: 'easeOutQuad' });
+    })
+    .catch(error => {
+        removeTypingIndicator(typingId);
+        chatBox.innerHTML += `<div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}"><div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div><div class="message-content">Error: ${error.message}<br><br>Contact support: <a href="tel:+1 (234) 567-890" class="contact-link">+1 (234) 567-890</a> | <a href="mailto:support@conversa.com" class="contact-link">support@conversa.com</a></div></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+}
+
+        function sendFAQMessage(question) {
+            document.getElementById("user-input").value = question;
+            sendMessage();
+        }
+
+        function showTypingIndicator() {
+            const id = 'typing-' + Date.now();
+            const chatBox = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = id;
+            typingDiv.className = 'message bot';
+            typingDiv.innerHTML = `<div class="message-icon bot"><i class="fas fa-robot"></i></div><div class="message-content"><div class="typing-animation"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+            chatBox.appendChild(typingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const element = document.getElementById(id);
+            if (element) element.remove();
+        }
+
+        function escapeHtml(unsafe)
+        {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function startVoiceRecognition() {
+            const micBtn = document.querySelector('.mic-btn');
+            const chatBox = document.getElementById("chat-messages");
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                chatBox.innerHTML += `<div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}"><div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div><div class="message-content">Speech recognition not supported. Use Chrome or Edge.</div></div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            recognition.onstart = () => {
+                micBtn.classList.add('active', 'listening');
+            };
+            recognition.onresult = (event) => {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0].transcript)
+                    .join('');
+                document.getElementById("user-input").value = transcript;
+                if (event.results[event.results.length - 1].isFinal) {
+                    sendMessage(true);
+                }
+            };
+            recognition.onerror = (event) => {
+                micBtn.classList.remove('active', 'listening');
+                chatBox.innerHTML += `<div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}"><div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div><div class="message-content">Speech error: ${event.error}. Check mic permissions.</div></div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            };
+            recognition.onend = () => {
+                micBtn.classList.remove('active', 'listening');
+            };
+            try {
+                recognition.start();
+            } catch (error) {
+                micBtn.classList.remove('active', 'listening');
+                chatBox.innerHTML += `<div class="message bot error" data-timestamp="${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}"><div class="message-icon bot"><i class="fas fa-exclamation-triangle"></i></div><div class="message-content">Failed to start voice: ${error.message}</div></div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        function speak(text) {
+            const synth = window.speechSynthesis;
+            if (!synth) {
+                console.warn("Speech synthesis not supported.");
+                return;
+            }
+            if (currentUtterance) synth.cancel();
+            const cleanText = String(text).trim();
+            console.log("Speaking (raw):", text);
+            console.log("Speaking (clean):", cleanText);
+
+            currentUtterance = new SpeechSynthesisUtterance(cleanText);
+            currentUtterance.lang = 'en-US';
+            currentUtterance.rate = 1.0;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
+            currentUtterance.onerror = (event) => console.error("Speech synthesis error:", event.error);
+            currentUtterance.onend = () => { currentUtterance = null; };
+            synth.speak(currentUtterance);
+        }
+
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            document.getElementById('lightbox-img').src = src;
+            lightbox.style.display = 'flex';
+            anime({ targets: '#lightbox-img', scale: [0, 1], duration: 500, easing: 'easeOutQuad' });
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        function minimizeChat() {
+            const chatBox = document.getElementById('chatbot-box');
+            chatBox.style.height = '50px';
+            chatBox.querySelector('.chat-messages').style.display = 'none';
+            chatBox.querySelector('.input-container').style.display = 'none';
+            chatBox.querySelector('.minimize-btn').textContent = '+';
+            chatBox.querySelector('.minimize-btn').onclick = maximizeChat;
+        }
+
+        function maximizeChat() {
+            const chatBox = document.getElementById('chatbot-box');
+            chatBox.style.height = '500px';
+            chatBox.querySelector('.chat-messages').style.display = 'block';
+            chatBox.querySelector('.input-container').style.display = 'block';
+            chatBox.querySelector('.minimize-btn').textContent = '–';
+            chatBox.querySelector('.minimize-btn').onclick = minimizeChat;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatBox = document.getElementById("chat-messages");
+            const welcomeMessage = "Hello! How can I assist you today?";
+            if (welcomeMessage) {
+                const welcomeDiv = document.createElement("div");
+                welcomeDiv.className = "message bot";
+                welcomeDiv.setAttribute('data-timestamp', new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+                welcomeDiv.innerHTML = `<div class="message-icon bot"><i class="fas fa-robot"></i></div><div class="message-content">${escapeHtml(welcomeMessage)} Click "Show FAQs" or ask me anything!</div>`;
+                chatBox.appendChild(welcomeDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            const debounce = (func, wait) => {
+                let timeout;
+                return (...args) => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            };
+            window.addEventListener('scroll', debounce(() => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.body.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+            }, 16));
+
+            VanillaTilt.init(document.querySelectorAll('.team-member, .tech-card, .objective-item'), {
+                max: 35,
+                speed: 300,
+                glare: true,
+                'max-glare': 0.6
+            });
+
+            document.getElementById('chatbot-widget').addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleChat();
+            });
+
+            const animateSection = (selector, delay = 0) => {
+                anime({ targets: selector, opacity: [0, 1], translateY: [50, 0], duration: 1000, delay, easing: 'easeOutQuad' });
+            };
+            animateSection('.hero h1');
+            animateSection('.hero p', 200);
+            animateSection('.hero-btns', 400);
+            animateSection('#hero-chat-preview', 600);
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const targets = entry.target.querySelectorAll('.animate-target');
+                        anime({
+                            targets,
+                            opacity: [0, 1],
+                            translateY: [50, 0],
+                            duration: 1000,
+                            delay: anime.stagger(200),
+                            easing: 'easeOutQuad'
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.25 });
+
+            document.querySelectorAll('section').forEach(section => {
+                section.querySelectorAll('h2, .overview-summary, .objective-item, .tech-card, .journey-step, .demo-item, .team-member, .future-item, .prototype-notice').forEach(el => el.classList.add('animate-target'));
+                observer.observe(section);
+            });
+
+            document.querySelectorAll('.demo-item img').forEach(img => {
+                img.classList.add('loading');
+                img.onload = () => img.classList.remove('loading');
+                img.onerror = () => {
+                    img.src = '{% static "images/placeholder.png" %}';
+                    img.alt = 'Image failed to load';
+                };
+            });
+
+            document.getElementById("user-input").addEventListener("keypress", (e) => {
+                if (e.key === "Enter") sendMessage();
+            });
+        });
+    </script>
+</body>
+</html>
