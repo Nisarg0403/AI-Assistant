@@ -17,7 +17,7 @@
 
 ---
 
-A project aimed at enhancing CONVERSA by integrating a suite of intelligent chatbots. These bots streamline repetitive tasks, foster seamless collaboration, and ensure better data management within Nextcloud Talk rooms.
+A project aimed at enhancing NextCloud by integrating a suite of intelligent chatbots (Conversa). These bots streamline repetitive tasks, foster seamless collaboration, and ensure better data management within Nextcloud Talk rooms.
 
 ---
 
