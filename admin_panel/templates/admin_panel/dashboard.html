@@ -346,7 +346,8 @@
 
     <div class="dashboard-container">
         <div class="analytics-header">
-            <h1>Chatbot Analytics</h1>
+            <h1>Welcome, {{ user.first_name|default:user.username|default:'User' }}! Chatbot Analytics</h1>
+
             <form id="dateFilterForm" class="filter-container">
                 <div>
                     <label for="startDate">Start Date:</label>

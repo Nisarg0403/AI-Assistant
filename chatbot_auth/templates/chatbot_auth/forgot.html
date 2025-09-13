@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password - CONVERSA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    <style>
+        :root {
+            /* Primary Colors */
+            --bg-primary: #F8F7F2; /* Off-White/Cream */
+            --brand-purple: #5D3FD3; /* Deep Purple */
+            /* Secondary Colors */
+            --text-primary: #2D2D2D; /* Soft Black */
+            --accent-blue: #4285F4; /* Accent Blue */
+            /* Accent Colors */
+            --cta-yellow: #FFCB47; /* Warm Yellow */
+            --bg-secondary: #E9E9E9; /* Light Gray */
+            /* White for card backgrounds */
+            --white: #FFFFFF;
+            /* Success/Error Colors */
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 5%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(93, 63, 211, 0.03) 0%, transparent 70%),
+                             radial-gradient(circle at 90% 80%, rgba(66, 133, 244, 0.03) 0%, transparent 70%);
+            overflow: hidden;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(93, 63, 211, 0.05);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--brand-purple), var(--accent-blue));
+        }
+
+        .auth-container h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.2rem);
+            color: var(--brand-purple);
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .auth-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 3px;
+            background: var(--cta-yellow);
+            border-radius: 5px;
+        }
+
+        .auth-container p {
+            color: var(--text-primary);
+            opacity: 0.7;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-bottom: 2px solid var(--bg-secondary);
+            border-radius: 8px 8px 0 0;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--brand-purple);
+            box-shadow: 0 4px 6px rgba(93, 63, 211, 0.1);
+            background: rgba(233, 233, 233, 0.7);
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: var(--text-primary);
+            opacity: 0.7;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: -10px;
+            left: 12px;
+            font-size: 12px;
+            color: var(--brand-purple);
+            background: var(--bg-primary);
+            padding: 0 5px;
+            font-weight: 500;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 30px;
+            background: var(--cta-yellow);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 203, 71, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(255, 203, 71, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .switch-link {
+            display: block;
+            margin-top: 20px;
+            color: var(--brand-purple);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .switch-link:hover {
+            color: var(--accent-blue);
+            text-decoration: underline;
+        }
+
+        .chatbot-teaser {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: clamp(50px, 10vw, 60px);
+            height: clamp(50px, 10vw, 60px);
+            background: var(--brand-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+            z-index: 1003;
+            box-shadow: 0 5px 15px rgba(93, 63, 211, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(93, 63, 211, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 20px rgba(93, 63, 211, 0.5); }
+        }
+
+        .chatbot-teaser:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-teaser i {
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            color: var(--white);
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 25px 20px;
+                max-width: 95%;
+            }
+
+            .auth-container h2 {
+                font-size: 1.6rem;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .chatbot-teaser {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .auth-container {
+                max-width: 480px;
+                padding: 45px 40px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="auth-container" tabindex="0">
+            <h2>Forgot Password</h2>
+            <p>Enter your email to reset your password.</p>
+            <form method="POST" action="{% url 'chatbot_auth:forgot' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="email" name="email" required placeholder=" " aria-label="Email">
+                    <label>Email</label>
+                </div>
+                <button class="btn" type="submit">Reset Password</button>
+            </form>
+            <a href="{% url 'chatbot_auth:auth' %}" class="switch-link">Back to Sign In</a>
+        </div>
+    </main>
+
+    <div class="chatbot-teaser" onclick="window.location.href='{% url 'chatbot_project:homepage' %}'">
+        <i class="fas fa-home"></i>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            anime({
+                targets: '.auth-container',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 800,
+                easing: 'easeOutQuad'
+            });
+        });
+    </script>
+</body>
+</html>

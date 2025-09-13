@@ -10,6 +10,6 @@ urlpatterns = [
     path('pricing/', TemplateView.as_view(template_name="chatbot/pricing.html"), name='pricing'),
     path('get_response/', views.get_response, name='chatbot_response'),
     path('get_sub_faqs/<int:faq_id>/', views.get_sub_faqs, name='get_sub_faqs'),
-    path('check-authentication/', views.check_authentication, name='check_authentication'),
+    path('check-authentication/', views.check_authentication, name='check_ cauthentication'),
     path('get_faqs/', views.get_faqs, name='get_faqs'),  # Fixed path
 ]

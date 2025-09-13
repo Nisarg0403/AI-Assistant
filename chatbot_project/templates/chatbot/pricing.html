@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,31 +7,25 @@
     <title>Pricing - CONVERSA Chatbot</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
     <style>
         :root {
-            /* Match homepage.html color palette */
-            --bg-primary: #1E1E1E;
-            --bg-secondary: #121212;
-            --accent-blue: #00A8E8;
-            --accent-cyan: #00E6E6;
-            --accent-purple: #B388EB;
-            --accent-magenta: #FF3CAC;
-            --text-primary: #E0E0E0;
-            --text-secondary: #A0A0A0;
-            --gradient: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-primary: #F8F7F2; /* Off-White/Cream */
+            --brand-purple: #5D3FD3; /* Deep Purple */
+            --text-primary: #2D2D2D; /* Soft Black */
+            --accent-blue: #4285F4; /* Accent Blue */
+            --cta-yellow: #FFCB47; /* Warm Yellow */
+            --bg-secondary: #E9E9E9; /* Light Gray */
+            --success-color: #10b981;
+            --error-color: #ef4444;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
         }
 
@@ -47,32 +42,32 @@
             left: 0;
             width: 0;
             height: 4px;
-            background: var(--gradient);
+            background: var(--brand-purple);
             z-index: 1002;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1001;
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
-            background: var(--bg-secondary);
-            box-shadow: 0 4px 20px var(--shadow-color);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1001;
+            padding: 20px 5% 10px;
+            background: rgba(248, 247, 242, 0.95);
             backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
         }
 
         .logo {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: clamp(1.5rem, 4vw, 1.8rem);
-            font-weight: bold;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+            color: var(--brand-purple);
             letter-spacing: 2px;
         }
 
@@ -91,14 +86,30 @@
             color: var(--text-primary);
             font-weight: 500;
             padding: 8px 16px;
-            border-radius: 25px;
             font-size: clamp(0.9rem, 2.5vw, 1rem);
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--brand-purple);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
         }
 
         nav ul li a:hover {
-            color: var(--accent-cyan);
-            background: var(--glass-bg);
-            box-shadow: 0 0 5px var(--accent-cyan);
+            color: var(--brand-purple);
         }
 
         .menu-toggle {
@@ -110,103 +121,151 @@
         .menu-toggle div {
             width: 30px;
             height: 3px;
-            background: var(--accent-blue);
+            background: var(--brand-purple);
             margin: 5px 0;
             border-radius: 3px;
         }
 
         .pricing-section {
-            padding: clamp(80px, 15vh, 100px) 5%;
+            padding: 120px 5% 80px;
             text-align: center;
-            position: relative;
-            background: linear-gradient(45deg, var(--bg-primary), var(--bg-secondary));
-            overflow: hidden;
-        }
-
-        .pricing-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            opacity: 0.05;
-            animation: wave 15s infinite;
-            z-index: 0;
-        }
-
-        @keyframes wave {
-            0% { transform: translateX(-100%) skewX(-30deg); }
-            100% { transform: translateX(100%) skewX(-30deg); }
+            background: var(--bg-primary);
         }
 
         .pricing-section h1 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: clamp(2rem, 6vw, 3rem);
-            color: var(--text-primary);
+            color: var(--brand-purple);
             margin-bottom: 20px;
-            letter-spacing: 2px;
-            z-index: 1;
         }
 
         .pricing-section p {
             font-size: clamp(1rem, 3vw, 1.2rem);
             max-width: 800px;
             margin: 0 auto 40px;
-            color: var(--text-secondary);
-            z-index: 1;
+            color: var(--text-primary);
+            opacity: 0.8;
+        }
+
+        .plan-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .toggle-container {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .toggle-option {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: var(--text-primary);
+            border: none;
+            background: transparent;
+        }
+
+        .toggle-option.active {
+            background: var(--cta-yellow);
+            color: var(--text-primary);
+        }
+
+        .plan-toggle .info-icon {
+            color: var(--brand-purple);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .plan-toggle .info-icon:hover {
+            color: var(--cta-yellow);
+        }
+
+        .switch-link {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: var(--accent-blue);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .switch-link:hover {
+            color: var(--cta-yellow);
         }
 
         .pricing-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 30px;
             justify-content: center;
-            z-index: 1;
+            margin-bottom: 40px;
         }
 
         .pricing-card {
             width: clamp(280px, 33%, 350px);
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            background: var(--bg-primary);
+            border: 1px solid rgba(93, 63, 211, 0.1);
             border-radius: 15px;
             padding: 30px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px var(--shadow-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card.recommended {
+            border: 2px solid var(--brand-purple);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.recommended::after {
+            content: 'Most Popular';
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--cta-yellow);
+            color: var(--text-primary);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 6px 25px var(--shadow-color);
+            transform: translateY(-5px) scale(1.02);
         }
 
         .pricing-card h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
-            color: var(--accent-cyan);
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
+            color: var(--brand-purple);
             margin-bottom: 20px;
-            letter-spacing: 1px;
         }
 
         .pricing-card .price {
             font-size: clamp(2rem, 5vw, 2.5rem);
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 20px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
 
         .pricing-card .price span {
             font-size: clamp(0.8rem, 2vw, 1rem);
-            color: var(--text-secondary);
+            color: var(--text-primary);
+            opacity: 0.7;
             display: block;
-            margin-top: 5px;
-            -webkit-text-fill-color: var(--text-secondary);
+        }
+
+        .pricing-card .price-note {
+            font-size: 12px;
+            color: var(--text-primary);
+            opacity: 0.7;
+            margin-bottom: 20px;
         }
 
         .pricing-card ul {
@@ -218,38 +277,295 @@
 
         .pricing-card ul li {
             font-size: clamp(0.9rem, 2vw, 1rem);
-            color: var(--text-secondary);
+            color: var(--text-primary);
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .pricing-card ul li::before {
+            content: "✓";
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .pricing-card ul li .tooltip {
+            display: none;
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .pricing-card ul li:hover .tooltip {
+            display: block;
+        }
+
+        .pricing-card .buy-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: var(--cta-yellow);
+            color: var(--text-primary);
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .pricing-card .buy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .pricing-card .trial-link {
+            display: block;
+            margin-top: 40px;
+            color: var(--accent-blue);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .pricing-card .trial-link:hover {
+            color: var(--cta-yellow);
+        }
+
+        .pricing-card .trial-link .tooltip {
+            top: -30px;
+        }
+
+        .pricing-faq {
+            padding: 50px 5% 40px;
+            text-align: left;
+            background: var(--bg-primary);
+        }
+
+        .pricing-faq h2 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--brand-purple);
+            font-size: clamp(1.8rem, 5vw, 2rem);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .faq-item h3 {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: var(--text-primary);
+            margin: 0 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-arrow {
+            font-size: 12px; /* Adjust size as needed for your icon */
+            color: #000000; /* Dark black arrow */
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-item p {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: var(--text-primary);
+            opacity: 0.8;
+            display: none;
+            margin-top: 10px;
+        }
+
+        .faq-item.active p {
+            display: block;
+        }
+
+        .notification-dialog {
+            display: none;
+            position: absolute;
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1004;
+            max-width: 250px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .notification-dialog.active {
+            display: block;
+        }
+
+        .notification-dialog p {
+            margin: 5px 0;
+            color: var(--text-primary);
+        }
+
+        .notification-dialog button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background: var(--cta-yellow);
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .notification-dialog button:hover {
+            transform: scale(1.05);
+        }
+
+        .contact-cta {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+
+        .footer {
+            background: var(--bg-secondary);
+            padding: 5rem 5% 2rem;
+            color: var(--text-primary);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--brand-purple);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section.brand .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: 600;
+            color: var(--brand-purple);
+            letter-spacing: 2px;
+        }
+
+        .footer-section p {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            opacity: 0.8;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            color: var(--brand-purple);
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .footer-social a:hover {
+            color: var(--cta-yellow);
+        }
+
+        .contact-info p {
+            margin-bottom: 0.8rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .pricing-card ul li::before {
-            content: "✓";
-            color: var(--accent-blue);
-            font-weight: bold;
-            font-size: 1.2rem;
+        .contact-info i {
+            color: var(--brand-purple);
         }
 
-        .pricing-card .buy-btn {
-            padding: 12px 25px;
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid var(--bg-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .newsletter-form button {
+            padding: 0.8rem 1.5rem;
             border: none;
-            border-radius: 25px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            font-weight: 600;
-            text-transform: uppercase;
+            border-radius: 5px;
+            background: var(--cta-yellow);
+            color: var(--text-primary);
             cursor: pointer;
-            background: var(--gradient);
-            color: black;
-            box-shadow: 0 0 5px var(--accent-blue);
-            display: inline-block;
+        }
+
+        .newsletter-form button:hover {
+            transform: scale(1.05);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(93, 63, 211, 0.1);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-bottom-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-bottom-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--cta-yellow);
+        }
+
+        .developer-credit a {
+            color: var(--brand-purple);
             text-decoration: none;
         }
 
-        .pricing-card .buy-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px var(--accent-cyan);
+        .developer-credit a:hover {
+            color: var(--cta-yellow);
         }
 
         @media (max-width: 1024px) {
@@ -260,9 +576,18 @@
             .pricing-card {
                 width: clamp(280px, 80%, 400px);
             }
+            .pricing-card.recommended {
+                transform: scale(1);
+            }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 768px) {
+            nav {
+                padding: 15px 5%;
+            }
             nav ul {
                 display: none;
                 flex-direction: column;
@@ -270,7 +595,7 @@
                 top: 60px;
                 left: 0;
                 width: 100%;
-                background: var(--bg-secondary);
+                background: var(--bg-primary);
                 padding: 15px 0;
             }
             nav ul.active {
@@ -285,19 +610,61 @@
             .pricing-section p {
                 font-size: 0.9rem;
             }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .footer-section.contact {
+                text-align: center;
+            }
+            .newsletter-form {
+                flex-direction: column;
+            }
+            .newsletter-form input,
+            .newsletter-form button {
+                width: 100%;
+            }
+            .footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-bottom-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
 
         @media (max-width: 480px) {
             .pricing-card {
                 width: 90%;
+                padding: 20px;
             }
+            .toggle-option {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            .faq-item {
+                padding: 15px;
+            }
+            .plan-toggle {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .plan-toggle .info-icon {
+                align-self: center;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-
-
-    <nav>
+    <div class="scroll-progress"></div>
+    <header>
+        <nav>
             <div class="logo">CONVERSA</div>
             <div class="menu-toggle" onclick="toggleMenu()">
                 <div></div>
@@ -310,82 +677,267 @@
                 <li><a href="{% url 'admin_panel:dashboard' %}">Access Dashboard</a></li>
             </ul>
         </nav>
+    </header>
 
     <section class="pricing-section">
         <h1>Pricing Plans</h1>
         <p>Choose the perfect plan to enhance your website with CONVERSA’s smart chatbot.</p>
+        <div class="plan-toggle">
+            <div class="toggle-container">
+                <button class="toggle-option active" data-type="one-time">One-Time</button>
+                <button class="toggle-option" data-type="subscription">Subscription</button>
+            </div>
+            <i class="fas fa-info-circle info-icon" onclick="showPricingInfo(event)"></i>
+        </div>
+        <a href="#pricing-faq" class="switch-link">Learn More About Our Plans</a>
         <div class="pricing-grid">
             <!-- Basic Plan -->
-            <div class="pricing-card">
+            <div class="pricing-card" data-plan="basic">
                 <h2>Basic</h2>
-                <div class="price">₹4,000<span>One-Time</span></div>
+                <div class="price" data-one-time="₹4,000" data-subscription="₹400"><span>One-Time</span></div>
+                <p class="price-note">Lifetime access, no recurring fees</p>
                 <ul>
-                    <li>24/7 Chatbot Support</li>
-                    <li>Basic FAQ Management</li>
-                    <li>1 Website Integration</li>
-                    <li>Email Support</li>
+                    <li>24/7 Chatbot Support<span class="tooltip">Available round-the-clock</span></li>
+                    <li>Basic FAQ Management<span class="tooltip">Up to 50 FAQs</span></li>
+                    <li>1 Website Integration<span class="tooltip">Single site support</span></li>
+                    <li>Email Support<span class="tooltip">Response within 48 hours</span></li>
                 </ul>
                 <a href="#" class="buy-btn" data-plan="basic">Buy Now</a>
+                <a href="#" class="trial-link" data-plan="basic">Try Subscription Free for 7 Days<span class="tooltip">Test all features free for 7 days, no card required</span></a>
             </div>
 
             <!-- Pro Plan -->
-            <div class="pricing-card">
+            <div class="pricing-card recommended" data-plan="pro">
                 <h2>Pro</h2>
-                <div class="price">₹8,000<span>One-Time</span></div>
+                <div class="price" data-one-time="₹8,000" data-subscription="₹800"><span>One-Time</span></div>
+                <p class="price-note">Lifetime access, no recurring fees</p>
                 <ul>
-                    <li>24/7 Chatbot Support</li>
-                    <li>Advanced FAQ Management</li>
-                    <li>3 Website Integrations</li>
-                    <li>Analytics Dashboard</li>
-                    <li>Priority Email Support</li>
+                    <li>24/7 Chatbot Support<span class="tooltip">Available round-the-clock</span></li>
+                    <li>Advanced FAQ Management<span class="tooltip">Up to 200 FAQs</span></li>
+                    <li>3 Website Integrations<span class="tooltip">Multi-site support</span></li>
+                    <li>Analytics Dashboard<span class="tooltip">Basic usage insights</span></li>
+                    <li>Priority Email Support<span class="tooltip">Response within 24 hours</span></li>
                 </ul>
                 <a href="#" class="buy-btn" data-plan="pro">Buy Now</a>
+                <a href="#" class="trial-link" data-plan="pro">Try Subscription Free for 7 Days<span class="tooltip">Test all features free for 7 days, no card required</span></a>
             </div>
 
             <!-- Enterprise Plan -->
-            <div class="pricing-card">
+            <div class="pricing-card" data-plan="enterprise">
                 <h2>Enterprise</h2>
-                <div class="price">₹16,000<span>One-Time</span></div>
+                <div class="price" data-one-time="₹16,000" data-subscription="₹1,600"><span>One-Time</span></div>
+                <p class="price-note">Lifetime access, no recurring fees</p>
                 <ul>
-                    <li>24/7 Chatbot Support</li>
-                    <li>Unlimited FAQ Management</li>
-                    <li>Unlimited Website Integrations</li>
-                    <li>Full Analytics Dashboard</li>
-                    <li>Custom Branding</li>
-                    <li>24/7 Phone & Email Support</li>
+                    <li>24/7 Chatbot Support<span class="tooltip">Available round-the-clock</span></li>
+                    <li>Unlimited FAQ Management<span class="tooltip">No FAQ limits</span></li>
+                    <li>Unlimited Website Integrations<span class="tooltip">All your sites</span></li>
+                    <li>Full Analytics Dashboard<span class="tooltip">Advanced insights</span></li>
+                    <li>Custom Branding<span class="tooltip">Personalized chatbot look</span></li>
+                    <li>24/7 Phone & Email Support<span class="tooltip">Instant support</span></li>
                 </ul>
                 <a href="#" class="buy-btn" data-plan="enterprise">Buy Now</a>
+                <a href="#" class="trial-link" data-plan="enterprise">Try Subscription Free for 7 Days<span class="tooltip">Test all features free for 7 days, no card required</span></a>
             </div>
         </div>
     </section>
 
+    <section class="pricing-faq" id="pricing-faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <h3>What does a one-time payment mean?<i class="fas fa-chevron-down faq-arrow"></i></h3>
+            <p>A one-time payment (e.g., ₹8,000 for Pro) grants lifetime access to the plan’s features. Includes email support but excludes future feature updates unless specified.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What does a subscription include?<i class="fas fa-chevron-down faq-arrow"></i></h3>
+            <p>A subscription (e.g., ₹800/mo for Pro) provides ongoing access to all features, regular updates, and premium support. You can cancel anytime.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What’s included in the free trial?<i class="fas fa-chevron-down faq-arrow"></i></h3>
+            <p>The 7-day free trial gives full access to subscription plan features. No credit card required, and you can upgrade anytime.</p>
+        </div>
+    </section>
+
+    <div id="pricing-info-dialog" class="notification-dialog">
+        <p><strong>One-Time:</strong> Single payment for lifetime access to your chosen plan’s features. No recurring fees, but future updates may not be included.</p>
+        <p><strong>Subscription:</strong> Monthly payment for ongoing access, including all features, regular updates, and premium support. Cancel anytime.</p>
+        <button onclick="closePricingInfo()">OK</button>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section brand">
+                <div class="logo">CONVERSA</div>
+                <p>Transforming customer service through AI-powered conversations. Experience the future of customer engagement.</p>
+                <div class="footer-social">
+                    <a href="https://github.com/yourusername" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/yourusername" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://twitter.com/yourusername" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section contact">
+                <h4>Get in Touch</h4>
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:support@conversa.ai">support@conversa.ai</a></p>
+                    <p><i class="fas fa-phone"></i> +1 (234) 567-890</p>
+                    <p><i class="fas fa-map-marker-alt"></i> New York, NY 10012</p>
+                </div>
+                <div class="newsletter">
+                    <h4>Subscribe to Newsletter</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" aria-label="Email for newsletter">
+                        <button type="submit" onclick="alert('Newsletter subscription coming soon!')">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>© 2025 CONVERSA. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+                <div class="developer-credit">
+                    Developed by <a href="https://github.com/yourusername" target="_blank">Nisarg Vakharia</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script>
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
 
+        function toggleMenu() {
+            document.querySelector("nav ul").classList.toggle("active");
+        }
 
-        // Mobile Menu Toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navUl = document.querySelector('nav ul');
-        menuToggle.addEventListener('click', () => {
-            navUl.classList.toggle('active');
-        });
-
-        // Placeholder for Razorpay (to be integrated later)
-        document.querySelectorAll('.buy-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const plan = button.getAttribute('data-plan');
-                alert(`Proceed to buy the ${plan} plan with Razorpay! (Integration pending)`);
+        function updatePricing(type) {
+            const cards = document.querySelectorAll('.pricing-card');
+            cards.forEach(card => {
+                const priceEl = card.querySelector('.price');
+                const price = priceEl.getAttribute(`data-${type}`);
+                const span = priceEl.querySelector('span');
+                const note = card.querySelector('.price-note');
+                priceEl.firstChild.textContent = price;
+                span.textContent = type === 'one-time' ? 'One-Time' : 'Per Month';
+                note.textContent = type === 'one-time' ? 'Lifetime access, no recurring fees' : 'Billed monthly, cancel anytime';
             });
-        });
+        }
 
-        // Anime.js Animation for Pricing Cards
-        anime({
-            targets: '.pricing-card',
-            translateY: [50, 0],
-            opacity: [0, 1],
-            duration: 1000,
-            delay: anime.stagger(200),
-            easing: 'easeOutQuad'
+        function showPricingInfo(event) {
+            const dialog = document.getElementById('pricing-info-dialog');
+            const buttonRect = event.target.getBoundingClientRect();
+            dialog.style.left = (buttonRect.right + 10) + 'px'; // Position to the right
+            dialog.style.top = (buttonRect.top + window.scrollY) + 'px'; // Align with button top
+            dialog.className = 'notification-dialog active';
+            dialog.style.display = 'block';
+            anime({
+                targets: dialog,
+                opacity: [0, 1],
+                translateX: [10, 0],
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+            setTimeout(closePricingInfo, 5000);
+        }
+
+        function closePricingInfo() {
+            const dialog = document.getElementById('pricing-info-dialog');
+            anime({
+                targets: dialog,
+                opacity: [1, 0],
+                translateX: [0, 10],
+                duration: 300,
+                easing: 'easeInQuad',
+                complete: () => {
+                    dialog.style.display = 'none';
+                    dialog.className = 'notification-dialog';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navUl = document.querySelector('nav ul');
+            menuToggle.addEventListener('click', toggleMenu);
+
+            // Plan toggle
+            const toggleButtons = document.querySelectorAll('.toggle-option');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    toggleButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    updatePricing(button.getAttribute('data-type'));
+                });
+            });
+
+            // Razorpay placeholder
+            document.querySelectorAll('.buy-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const plan = button.getAttribute('data-plan');
+                    alert(`Proceed to buy the ${plan} plan with Razorpay! (Integration pending)`);
+                });
+            });
+
+            // Trial placeholder
+            document.querySelectorAll('.trial-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const plan = link.getAttribute('data-plan');
+                    alert(`Start a free trial for the ${plan} plan! (Integration pending)`);
+                });
+            });
+
+            // FAQ accordion
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                    const answer = item.querySelector('p');
+                    anime({
+                        targets: answer,
+                        opacity: item.classList.contains('active') ? [0, 1] : [1, 0],
+                        translateY: item.classList.contains('active') ? [10, 0] : [0, 10],
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+
+            // Anime.js animations
+            anime({
+                targets: '.pricing-card',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                duration: 1000,
+                delay: anime.stagger(200),
+                easing: 'easeOutQuad'
+            });
+
+            anime({
+                targets: '.faq-item',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutQuad'
+            });
+
+            // Scroll progress
+            window.addEventListener('scroll', debounce(() => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.body.scrollHeight - window.innerHeight;
+                const scrollPercent = docHeight ? (scrollTop / docHeight) * 100 : 0;
+                document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+            }, 16));
         });
     </script>
 </body>
