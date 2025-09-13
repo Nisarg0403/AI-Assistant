@@ -238,7 +238,7 @@ The Clean-Up Bot helps maintain a tidy workspace by archiving inactive chats and
 
 ## Team - Trouble Shooters
 
-Developed during the National Level Open Source Online Hackathon, \प्रज्ञा, by the team **\Trouble Shooters**.
+Developed during the National Level Open Source Online Hackathon, प्रज्ञा, by the team **Trouble Shooters**.
 
 ---
 
